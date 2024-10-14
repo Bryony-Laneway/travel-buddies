@@ -1,6 +1,7 @@
 // seed.js
 const mysql = require('mysql2');
 const fs = require('fs');
+require('dotenv').config();
 
 // Read the seed SQL file
 const seedSql = fs.readFileSync('seed.sql', 'utf8');
@@ -9,7 +10,7 @@ const seedSql = fs.readFileSync('seed.sql', 'utf8');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Qwert@123',
+  password: process.env.DATABASE_PASSWORD,
   database: 'travel_buddies',
   multipleStatements: true,
 });

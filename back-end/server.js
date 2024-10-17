@@ -5,6 +5,7 @@ const db = require('./config/db');
 const PORT = process.env.PORT;
 
 const userRoutes = require('./routes/userRoutes');
+const tripRoutes = require('./routes/tripRoutes');
 
 app.use(express.json());
 dotenv.config();
@@ -15,6 +16,7 @@ app.get("/", function(req, res) {
 });
 
 app.use('/users', userRoutes);
+app.use('/trips', tripRoutes);
 
 
 app.listen(PORT, () => {

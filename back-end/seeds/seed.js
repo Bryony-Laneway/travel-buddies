@@ -4,13 +4,13 @@ const fs = require('fs');
 require('dotenv').config();
 
 // Read the seed SQL file
-const seedSql = fs.readFileSync('seed.sql', 'utf8');
+const seedSql = fs.readFileSync('seeds/seed.sql', 'utf8');
 
 // Create a connection to the MySQL database
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: process.env.DATABASE_PASSWORD,
+  password: "Qwery@123",
   database: 'travel_buddies',
   multipleStatements: true,
 });

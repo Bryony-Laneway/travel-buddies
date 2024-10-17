@@ -10,6 +10,16 @@ function UpcomingTrips() {
       date: "Date of trip",
       host: "Host name",
     },
+    {
+      name: "Trip Name",
+      date: "Date of trip",
+      host: "Host name",
+    },
+    {
+      name: "Trip Name",
+      date: "Date of trip",
+      host: "Host name",
+    },
   ];
   return upcoming;
 }

@@ -17,13 +17,13 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content col-10 mx-auto">
-        <div className="row">
+        <div className="row mb-5">
           <h3 className="col-10">Upcoming Trips</h3>
           <button className="btn btn-outline-success add col-2">
             Create Trip
           </button>
         </div>
-        <div>{upcoming.map(CreateCard)}</div>
+        <div className="row">{upcoming.map(CreateCard)}</div>
       </div>
     </div>
   );

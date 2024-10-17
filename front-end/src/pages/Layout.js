@@ -64,11 +64,6 @@ const Layout = () => {
             </div>
           </div>
         </nav>
-        <div className="container">
-          <div className="welcome">
-            <h4>Hello Bryony</h4>
-          </div>
-        </div>
       </div>
 
       <Outlet />

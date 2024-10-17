@@ -29,7 +29,7 @@ INSERT INTO users (name, surname, email, password_hash, profile_pic, created_at)
 VALUES 
 ('Evandro', 'Lugli', 'evandro.lugli@gmail.com', '123456', 'evandro.jpg', '2024-10-09'),
 ('Bryony', 'Seth', 'bryony.seth@gmail.com', '123456', 'bryony.jpg', '2024-10-10'),
-('Danilo', 'Silva', 'danilo.silta@gmail.com', '123456', 'danilo.jpg', '2024-10-11');
+('Danilo', 'Oliveira', 'danilo.silta@gmail.com', '123456', 'danilo.jpg', '2024-10-11');
 
 -- Create the trips table
 CREATE TABLE trips

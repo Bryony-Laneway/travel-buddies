@@ -1,7 +1,5 @@
-// seed.js
-<<<<<<< HEAD:back-end/seeds/seed.js
-const mysql = require('mysql2');
 const fs = require('fs');
+const mysql = require('mysql2'); // Import mysql2
 require('dotenv').config();
 
 // Read the seed SQL file
@@ -9,24 +7,10 @@ const seedSql = fs.readFileSync('seeds/seed.sql', 'utf8');
 
 // Create a connection to the MySQL database
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: "Qwery@123",
-  database: 'travel_buddies',
-=======
-const mysql = require("mysql2");
-const fs = require("fs");
-
-// Read the seed SQL file
-const seedSql = fs.readFileSync("seed.sql", "utf8");
-
-// Create a connection to the MySQL database
-const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: process.env.DB_PASSWORD,
   database: "travel_buddies",
->>>>>>> origin/main:back-end/seed.js
   multipleStatements: true,
 });
 

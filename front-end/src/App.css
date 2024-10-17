@@ -78,6 +78,17 @@
   color: #2f9e44;
 }
 
+.content {
+  text-align: left;
+}
+
+h3 {
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: #2f9e44;
+}
+
 .balsamiq-sans-regular {
   font-family: "Balsamiq Sans", sans-serif;
   font-weight: 400;

@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
 // import { MyHeader } from "./components/header";
-import Login from "./components/Login";
+// import Login from "./components/Login";
 
-var loggin = true;
+var loggin = false;
 //condition needs to be inside a function. If the if/else statement is not inside a function, it won't work.
 function LogIn() {
   if (loggin) {
@@ -15,14 +17,19 @@ function LogIn() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-
-            {/* <Route path="contact" element={<Contact />} /> */}
           </Route>
         </Routes>
       </BrowserRouter>
     );
   } else {
-    return <Login />;
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Login />} />
+          <Route exact path="/SignUp" element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    );
   }
 }
 

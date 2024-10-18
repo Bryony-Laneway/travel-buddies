@@ -1,6 +1,9 @@
 :root {
   --green-300: #a9e34b;
   --green-600: #2f9e44;
+  --orange-500: #f76707;
+  --orange-200: #f76707c3;
+  --link-font: font-family: "Balsamiq Sans", sans-serif;
 }
 
 .App {
@@ -22,6 +25,55 @@
   }
 } */
 
+.login-input {
+  border: 1px solid var(--green-300);
+  color: var(--green-600);
+}
+
+.forgotton-link {
+  text-decoration: none;
+  font-style: italic;
+  color: black;
+}
+
+.forgotton-link:hover {
+  color: var(--green-600);
+}
+
+.btn-success {
+  background-color: var(--green-300);
+  color: black;
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--green-600);
+  color: white;
+ 
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+.link:hover {
+  color: white;
+}
+
+#error {
+  visibility: hidden;
+}
+#reseterror {
+  visibility: hidden;
+}
+
+.navbar {
+  background-color: white;
+  margin-top: 0;
+}
 .home-link {
   position: fixed;
   top: 20px;
@@ -34,19 +86,19 @@
 }
 
 .navbar img:hover {
-  border: 1px solid #f76707c3;
+  border: 1px solid var(--orange-200);
 }
 .nav-link {
   font-family: "Balsamiq Sans", sans-serif;
   font-weight: 700;
   font-style: normal;
-  color: #f76707;
+  color: var(--orange-500);
   line-height: 45px;
 }
 
 .nav-link:hover,
 .nav-link:active {
-  color: #f76707c3;
+  color: var(--orange-200);
 }
 .navbar-nav,
 .navbar-toggler {
@@ -55,8 +107,8 @@
 }
 
 .navbar-toggler {
-  color: #f76707;
-  border: 1px solid #f76707;
+  color: var(--orange-500);
+  border: 1px solid var(--orange-500);
 }
 
 .show,
@@ -72,12 +124,12 @@
 }
 
 .navbar-profile-pic:hover {
-  border: 1px solid #f76707c3;
+  border: 1px solid var(--orange-200);
 }
 
 .content {
   text-align: left;
-  margin-top: 150px;
+  margin-top: 170px;
 }
 
 h3 {
@@ -93,11 +145,22 @@ h3 {
   float: right;
 }
 
+.btn-outline-warning {
+  border-color: var(--orange-500);
+  color: var(--orange-500);
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+
+}
+
+.btn-outline-warning:hover {
+  background-color: var(--orange-200);
+  color: white;
+}
+
 .card {
-  border: 1px solid #2f9e44;
-  /* float: left; */
-  /* width: 40%; */
-  /* margin: 5% auto 5% 2%; */
+  border: 1px solid var(--green-600);
   text-align: center;
   background-color: var(--green-300);
 }
@@ -109,6 +172,52 @@ h3 {
 
 .card-subtitle {
   font-style: italic;
+}
+
+.card-img-top {
+  height: 250px;
+  background-size: cover;
+}
+
+.buddies-profile-pic {
+  height: 80px;
+  width: 80px;
+  border-radius: 90px;
+}
+
+.footer-logo {
+  width: 200px;
+  margin: auto;
+  margin-top: 150px;
+}
+
+.footer-link {
+  color: var(--orange-500);
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.footer-link:hover {
+  color: var(--orange-200);
+}
+
+.modal {
+  border: 2px solid var(--green-300);
+  border-radius: 30px;
+  width: auto;
+  margin: 5% 30%;
+}
+
+.modal-header {
+  text-align: center;
+  color: var(--green-600);
+  border-bottom-color: var(--green-300);
+  border-top: none;
+}
+
+.btn-close {
+  color: var(--green-600);
 }
 
 .balsamiq-sans-regular {

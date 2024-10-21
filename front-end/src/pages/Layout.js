@@ -37,7 +37,7 @@ const Layout = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="/Past">
                     Past
                   </a>
                 </li>
@@ -48,11 +48,11 @@ const Layout = () => {
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#">
-                    Friends
+                    Buddies
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="/Profile">
                     <img
                       className="navbar-profile-pic"
                       src="./images/me.jpg"

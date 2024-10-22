@@ -16,6 +16,23 @@ router.get("/", (req, res) => {
   });
 });
 
+// Get a specific user by ID (avoiding sensitive data like password_hash)
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT id, name, surname, email, profile_pic, created_at FROM users WHERE id = ?";
+  
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" }); // Handle case where no user is found
+    }
+    res.json(results[0]); // Return the first result as the specific user
+  });
+});
+
 // User login route (authenticating users)
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;

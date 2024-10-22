@@ -37,7 +37,7 @@ function Past() {
   return (
     <div className="container">
       <div className="Past">
-        <h1 className="mt-5">Hello</h1>
+        <h1 className="mt-5">My Past Trips</h1>
         {pasts.map((past) => (
           <p key={past.id}>{past.trip_name}</p>
         ))}

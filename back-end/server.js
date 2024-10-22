@@ -8,7 +8,7 @@ const PORT = process.env.PORT;
 const cors = require("cors");
 // const app = express();
 const https = require("node:https");
-const axios = require("axios");
+// const axios = require("axios");
 //cors
 const allowedOrigins = ["http://localhost:3000", "http://localhost:3333"];
 app.use(

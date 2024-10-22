@@ -1,4 +1,5 @@
 // import { BrowserRouter } from "react-router-dom";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
@@ -8,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Past from "./pages/Past";
 import UpdateProfile from "./pages/Profile";
+import UpcomingTrips from "./pages/Upcoming";
 // import { MyHeader } from "./components/header";
 // import Login from "./components/Login";
 
@@ -21,6 +23,7 @@ function LogIn() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route exact path="/Past" element={<Past />} />
+            <Route exact path="/Upcoming" element={<UpcomingTrips />} />
             <Route exact path="/Profile" element={<UpdateProfile />} />
           </Route>
         </Routes>

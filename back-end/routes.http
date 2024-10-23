@@ -14,7 +14,6 @@ GET http://localhost:3333/trips/1
 ### Get all trips by host_id
 GET http://localhost:3333/trips/host/1
 
-
 ### Login a user
 POST http://localhost:3333/users/login
 Content-Type: application/json
@@ -33,4 +32,13 @@ Content-Type: application/json
   "surname": "Sur Test",
   "email": "test4@gmail.com",
   "password": "test123"
+}
+
+### Reset Password
+POST http://localhost:3333/users/reset-password
+Content-Type: application/json
+
+{
+  "email": "evandro.lugli@gmail.com",
+  "newPassword": "123456"
 }

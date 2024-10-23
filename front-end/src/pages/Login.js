@@ -1,157 +1,187 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function checkPassword() {
-  var resetpassword = document.getElementById("resetpassword").value;
-  var resetpassword2 = document.getElementById("resetpassword2").value;
-  var reseterrorMessage = document.getElementById("reseterror");
-  var reseterrorToThrow = "";
+export default function Login({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
+  const [resetPassword2, setResetPassword2] = useState("");
+  const [resetError, setResetError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  try {
-    if (resetpassword.length < 6) {
-      reseterrorToThrow += "<br /> Password is too short";
-    }
-    if (/[A-Z]/g.test(resetpassword) == false) {
-      reseterrorToThrow +=
-        "<br /> Password should include at least one capital letter";
-    }
-    if (/\d/g.test(resetpassword) == false) {
-      reseterrorToThrow += "<br /> Password should include at least one number";
-    }
-    if (resetpassword != resetpassword2) {
-      reseterrorToThrow += "<br /> Passwords must match";
-    }
-    throw reseterrorToThrow;
-  } catch (err) {
-    document.getElementById("reseterror").style.visibility = "visible";
-    reseterrorMessage.innerHTML = err;
-  }
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-const Login = () => {
+    try {
+      const response = await fetch("http://localhost:3333/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        onLogin(data.user);
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      setError("An error occurred during login.");
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    setResetError(null);
+    setSuccessMessage(null);
+    let errorMessages = [];
+
+    if (resetPassword.length < 6) errorMessages.push("Password is too short.");
+    //if (!/[A-Z]/.test(resetPassword)) errorMessages.push("Must include a capital letter.");
+    //if (!/\d/.test(resetPassword)) errorMessages.push("Must include a number.");
+    if (resetPassword !== resetPassword2) errorMessages.push("Passwords must match.");
+
+    if (errorMessages.length) {
+      setResetError(errorMessages.join(" "));
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3333/users/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: resetEmail, newPassword: resetPassword }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setSuccessMessage("Password reset successfully. Please log in with your new password.");
+      } else {
+        setResetError(data.message || "Password reset failed.");
+      }
+    } catch (error) {
+      setResetError("An error occurred during the password reset.");
+    }
+  };
+
   return (
-    <>
-      <div className="login">
-        <img src="./images/logo.png" alt="logo" className="mt-5 mb-5" />
+    <div className="container mt-5 text-center">
+      <img src="./images/logo.png" alt="logo" className="mb-5" />
+      <h2>Login</h2>
 
-        <form action="" method="post" className="login-form">
-          <div className="col-xs-10 col-md-4 mx-auto">
-            <input
-              type="text"
-              name="username"
-              id="username"
-              className="login-input mb-4 mt-2 form-control"
-              placeholder="Username"
-              required
-            ></input>
-          </div>
+      {error && <p className="text-danger">{error}</p>}
 
-          <div className="col-xs-10 col-md-4 mx-auto">
-            <input
-              id="password"
-              type="text"
-              name="password"
-              className="login-input mb-4 form-control"
-              placeholder="Password"
-              required
-            ></input>
-          </div>
-
-          <button type="submit" className="btn btn-outline-warning">
-            Login
-          </button>
-        </form>
-        <div className="forgotton-div mt-4">
-          <a
-            className="forgotton-link"
-            data-bs-toggle="modal"
-            data-bs-target="#ForgotPasswordModal"
-          >
-            Forgot Password
-          </a>
+      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: "400px" }}>
+        <div className="mb-3">
+          <label>Email</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Enter your email"
+          />
         </div>
+        <div className="mb-3">
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Enter your password"
+          />
+        </div>
+        <button type="submit" className="btn btn-warning w-100">Login</button>
+      </form>
 
-        <Link to="/SignUp" className="link">
-          <button type="" className="btn btn-success mt-5">
-            {" "}
-            Sign up
-          </button>
-        </Link>
+      <div className="mt-3">
+        <a
+          href="#ForgotPasswordModal"
+          data-bs-toggle="modal"
+          className="text-info"
+        >
+          Forgot Password?
+        </a>
       </div>
 
-      {/* modals */}
+      <Link to="/signup">
+        <button className="btn btn-success mt-4">Sign Up</button>
+      </Link>
+
+      {/* Reset Password Modal */}
       <div
-        className="modal h-auto"
+        className="modal fade"
         id="ForgotPasswordModal"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="ForgotPasswordModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog mx-auto mt-0">
+        <div className="modal-dialog modal-dialog-centered modal-sm">
           <div className="modal-content">
             <div className="modal-header">
-              <h1
-                className="modal-title fs-4 mx-2"
-                id="ForgotPasswordModalLabel"
-              >
-                Reset Password
-              </h1>
-              <button
-                type="button"
-                className="btn-close btn-outline-warning"
-                data-bs-dismiss="modal"
-                aria-label="close"
-              ></button>
+              <h5 className="modal-title" id="ForgotPasswordModalLabel">Reset Password</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
-              <form action="" method="" className="forgotton-password-form">
-                <div className="col-xs-12 col-md-10 mx-auto">
+              {resetError && <div className="alert alert-danger">{resetError}</div>}
+              {successMessage && <div className="alert alert-success">{successMessage}</div>}
+
+              <form>
+                <div className="mb-3">
+                  <label>Email</label>
                   <input
                     type="email"
-                    name="resetemail"
-                    id="resetemail"
-                    className="login-input mb-4 mt-2 form-control"
-                    placeholder="Email Address"
+                    className="form-control"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
                     required
-                  ></input>
+                    placeholder="Enter your email"
+                  />
                 </div>
-
-                <div className="col-xs-12 col-md-10 mx-auto">
+                <div className="mb-3">
+                  <label>New Password</label>
                   <input
-                    id="resetpassword"
                     type="password"
-                    name="resetpassword"
-                    className="login-input mb-4 form-control"
-                    placeholder="Create New Password"
+                    className="form-control"
+                    value={resetPassword}
+                    onChange={(e) => setResetPassword(e.target.value)}
                     required
-                  ></input>
+                    placeholder="Create new password"
+                  />
                 </div>
-
-                <div className="col-xs-12 col-md-10 mx-auto">
+                <div className="mb-3">
+                  <label>Confirm Password</label>
                   <input
-                    id="resetpassword2"
                     type="password"
-                    name="resetpassword2"
-                    className="login-input mb-4 form-control"
-                    placeholder="Re-enter Password"
+                    className="form-control"
+                    value={resetPassword2}
+                    onChange={(e) => setResetPassword2(e.target.value)}
                     required
-                  ></input>
+                    placeholder="Confirm new password"
+                  />
                 </div>
-                <div className="alert alert-danger" id="reseterror"></div>
-
                 <button
-                  onClick={checkPassword}
-                  type="submit"
-                  className="btn btn-outline-warning"
+                  type="button"
+                  onClick={handlePasswordReset}
+                  className="btn btn-warning w-100"
                 >
-                  Reset
+                  Reset Password
                 </button>
               </form>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-export default Login;
+}

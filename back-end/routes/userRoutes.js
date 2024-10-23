@@ -63,7 +63,7 @@ router.post("/login", async (req, res) => {
       }
 
       // Send back user info (or generate JWT token here)
-      res.json({ success: true, user: { name: user.name, email: user.email } });
+      res.json({ success: true, user: { id: user.id, name: user.name, email: user.email } });
     });
   } catch (error) {
     console.error("Error logging in:", error);
@@ -95,6 +95,38 @@ router.post("/register", async (req, res) => {
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+// Endpoint for resetting password
+router.post("/reset-password", async (req, res) => {
+  const { email, newPassword } = req.body;
+  //console.log("Request body:", req.body);
+
+  try {
+    // Check if the user exists
+    const [rows] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+
+    // Check if any user was found
+    if (rows.length === 0) { 
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Validate the new password
+    if (newPassword.length < 6) {
+      return res.status(400).json({ success: false, message: "Password must be at least 6 characters long" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    await db.promise().query("UPDATE users SET password_hash = ? WHERE email = ?", [hashedPassword, email]);
+
+    return res.json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return res.status(500).json({ success: false, message: "An error occurred during password reset" });
   }
 });
 

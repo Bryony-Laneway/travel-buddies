@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 
-const Layout = () => {
+const Layout = ({ onLogout, user }) => {
   return (
     <>
       <div>
@@ -60,6 +60,11 @@ const Layout = () => {
                     />
                   </a>
                 </li>
+                <li>
+            </li>
+              <button onClick={onLogout} className="btn btn-warning">
+                Logout
+              </button>
               </ul>
             </div>
           </div>

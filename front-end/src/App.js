@@ -1,7 +1,4 @@
-// import { BrowserRouter } from "react-router-dom";
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
@@ -10,51 +7,52 @@ import Login from "./pages/Login";
 import Past from "./pages/Past";
 import UpdateProfile from "./pages/Profile";
 import UpcomingTrips from "./pages/Upcoming";
-// import { MyHeader } from "./components/header";
-// import Login from "./components/Login";
-
-var loggin = true;
-//condition needs to be inside a function. If the if/else statement is not inside a function, it won't work.
-function LogIn() {
-  if (loggin) {
-    return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route exact path="/Past" element={<Past />} />
-            <Route exact path="/Upcoming" element={<UpcomingTrips />} />
-            <Route exact path="/Profile" element={<UpdateProfile />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    );
-  } else {
-    return (
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Login />} />
-          <Route exact path="/SignUp" element={<SignUp />} />
-        </Routes>
-      </BrowserRouter>
-    );
-  }
-}
+import { useState, useEffect } from "react";
 
 export default function App() {
-  return <div className="App">{LogIn()}</div>;
+  const [user, setUser] = useState(null);
+
+  // Check if user is logged in when the app starts
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser)); // Load user info from localStorage
+    }
+  }, []);
+
+  const handleLogin = (userInfo) => {
+    setUser(userInfo);
+    localStorage.setItem("user", JSON.stringify(userInfo)); // Store user info
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user"); // Remove user info
+  };
+
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={user ? <Navigate to="/" /> : <SignUp />} />
+          <Route path="/past" element={<Past />} />
+          <Route path="/upcoming" element={<UpcomingTrips />} />
+          <Route path="/profile" element={<UpdateProfile />} />
+
+          {/* Protected Routes */}
+          <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" />}>
+            <Route index element={<Home />} />
+            <Route path="/past" element={<Past />} />
+            <Route path="/upcoming" element={<UpcomingTrips />} />
+            <Route path="/profile" element={<UpdateProfile />} />
+          </Route>
+
+          {/* Catch-all for undefined routes */}
+          <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
-
-// export default function App() {
-//   return <div className="App">{LogIn()}</div>;
-// }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <MyHeader />
-//     </div>
-//   );
-// }
-
-// export default App;

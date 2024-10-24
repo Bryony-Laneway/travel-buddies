@@ -11,12 +11,13 @@ import { useState, useEffect } from "react";
 
 export default function App() {
   const [user, setUser] = useState(null);
-
+  
   // Check if user is logged in when the app starts
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser)); // Load user info from localStorage
+      // console.log("User loaded from localStorage:", savedUser); // Debugging
     }
   }, []);
 
@@ -37,12 +38,10 @@ export default function App() {
           {/* Public Routes */}
           <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
           <Route path="/signup" element={user ? <Navigate to="/" /> : <SignUp />} />
-          <Route path="/past" element={<Past />} />
-          <Route path="/upcoming" element={<UpcomingTrips />} />
-          <Route path="/profile" element={<UpdateProfile />} />
 
           {/* Protected Routes */}
-          <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" />}>
+          {/* <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" />}> */}
+          <Route path="/" element={<Layout/>}>
             <Route index element={<Home />} />
             <Route path="/past" element={<Past />} />
             <Route path="/upcoming" element={<UpcomingTrips />} />

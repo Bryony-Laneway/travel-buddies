@@ -1,26 +1,18 @@
-function UpcomingTrips() {
-  const upcoming = [
-    {
-      name: "Trip Name",
-      date: "Date of trip",
-      host: "Host name",
-    },
-    {
-      name: "Trip Name",
-      date: "Date of trip",
-      host: "Host name",
-    },
-    {
-      name: "Trip Name",
-      date: "Date of trip",
-      host: "Host name",
-    },
-    {
-      name: "Trip Name",
-      date: "Date of trip",
-      host: "Host name",
-    },
-  ];
-  return upcoming;
+import { useEffect, useState } from "react";
+
+function UpcomingTripsData() {
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch("http://localhost:3333/trips");
+      const jsonResult = await result.json();
+      setUpcomingTrips(jsonResult);
+    };
+    fetchData();
+  }, []);
+
+  return upcomingTrips;
 }
-export default UpcomingTrips;
+
+export default UpcomingTripsData;

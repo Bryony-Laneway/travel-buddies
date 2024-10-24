@@ -1,58 +1,28 @@
 import React, { useEffect, useState } from "react";
-
-// function Card(upcomingTrip) {
-//   return (
-//     <Card
-//       key={upcomingTrip.id}
-//       name={upcomingTrip.trip_name}
-//       date={upcomingTrip.start_date}
-//       host={upcomingTrip.host_id}
-//     />
-//   );
-// }
+import Card from "../components/Card";
+import UpcomingTripsData from "../components/UpcomingTrips"
 
 function UpcomingTrips() {
-  const [upcomingTrips, setUpcomingTrips] = useState([]);
+  const upcomingTrips = UpcomingTripsData();
+  console.log(upcomingTrips);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("http://localhost:3333/trips");
-      const jsonResult = await result.json();
-      setUpcomingTrips(jsonResult);
-    };
-    fetchData();
-  }, []);
-
-  //   const submitTrip = async () => {
-  //     const myData = {
-  //       //get user inputs for adding a trip
-  //       //   title: ,
-  //       //   host: ,
-  //       //   co-host:,
-  //       //   ...
-  //     };
-
-  //     const result = await fetch("http://localhost:3333/trips", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(myData),
-  //     });
-  //     const resultInJson = await result.json();
-  //   };
-
+  function CreateCard(upcomingTrips) {
+    return (
+      <Card
+        key={upcomingTrips.id}
+        name={upcomingTrips.trip_name}
+        date={upcomingTrips.host_id}
+        host={upcomingTrips.start_date}
+      />
+    );
+  }
+  
   return (
     <div className="contents mt-5">
       <h1 className="mt-5">Upcoming Trips</h1>
       <button className="btn btn-outline-warning">Create Trip</button>
       <div className="upcoming-Trips-container">
-        {upcomingTrips.map((upcomingTrip) => (
-          <div key={upcomingTrip.id} className="upcoming-trip-item">
-            <h4>{upcomingTrip.trip_name}</h4>
-            {/* <div className="row">{Card(upcomingTrip)}</div> */}
-          </div>
-        ))}
+      <div className="row">{upcomingTrips.map(CreateCard)}</div>
       </div>
     </div>
   );

@@ -1,29 +1,37 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import PastCard from "../components/PastCard";
+import PastTripsData from "../components/PastTrips";
 
-function Past() {
-  const [pasts, setPast] = useState([]);
+function PastTrips() {
+  const pastTrips = PastTripsData();
+  console.log(pastTrips);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3333/trips")
-      .then((response) => {
-        setPast(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  function CreateCard(pastTrips) {
+    return (
+      <PastCard
+        key={pastTrips.id}
+        id={pastTrips.id}
+        name={pastTrips.trip_name}
+        date={pastTrips.start_date}
+        host={pastTrips.host_id}
+        img={pastTrips.photo}
+      />
+    );
+  }
+
   return (
     <div className="container">
-      <div className="Past">
-        <h1 className="mt-5">My Past Trips</h1>
-        {pasts.map((past) => (
-          <p key={past.id}>{past.trip_name}</p>
-        ))}
+      <div className="content col-10 mx-auto">
+        <div className="row mb-5">
+          <div className="col">
+            <h3 className="">Past Trips</h3>
+          </div>
+        </div>
+        <div className="past-Trips-container">
+          <div className="row">{pastTrips.map(CreateCard)}</div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Past;
+export default PastTrips;

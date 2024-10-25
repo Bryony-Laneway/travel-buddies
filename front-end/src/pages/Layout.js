@@ -8,7 +8,7 @@ const Layout = ({ onLogout, user }) => {
           <div className="container-fluid">
             <a
               className="home-link"
-              href="localhost:3000"
+              href="/Home"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -31,12 +31,12 @@ const Layout = ({ onLogout, user }) => {
                       <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li> */}
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="/Upcoming">
                     Upcoming
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/past">
+                  <a className="nav-link" href="/Past">
                     Past
                   </a>
                 </li>
@@ -59,11 +59,10 @@ const Layout = ({ onLogout, user }) => {
                     />
                   </a>
                 </li>
-                <li>
-            </li>
-              <button onClick={onLogout} className="btn btn-warning">
-                Logout
-              </button>
+                <li></li>
+                <button onClick={onLogout} className="btn btn-ouline-warning">
+                  Logout
+                </button>
               </ul>
             </div>
           </div>

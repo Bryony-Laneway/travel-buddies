@@ -1,26 +1,18 @@
-function PastTrips() {
-  const past = [
-    {
-      img: "./images/logo.png",
-      name: "Trip Name",
-      date: "Month Year",
-    },
-    {
-      img: "./images/me.jpg",
-      name: "Trip Name",
-      date: "Month Year",
-    },
-    {
-      img: "./images/logo.png",
-      name: "Trip Name",
-      date: "Month Year",
-    },
-    {
-      img: "./images/me.jpg",
-      name: "Trip Name",
-      date: "Month Year",
-    },
-  ];
-  return past;
+import { useEffect, useState } from "react";
+
+function PastTripsData() {
+  const [pastTrips, setPastTrips] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch("http://localhost:3333/trips");
+      const jsonResult = await result.json();
+      setPastTrips(jsonResult);
+    };
+    fetchData();
+  }, []);
+
+  return pastTrips;
 }
-export default PastTrips;
+
+export default PastTripsData;

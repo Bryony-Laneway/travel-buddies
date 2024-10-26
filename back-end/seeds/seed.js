@@ -133,8 +133,8 @@ const seedDatabase = async () => {
       // Insert fake users
       `INSERT INTO users (name, surname, email, password_hash, profile_pic, created_at) VALUES
         ('Evandro', 'Lugli', 'evandro.lugli@gmail.com', '${await bcrypt.hash('123456', 10)}', 'images/evandro.jpg', NOW()),
-        ('Bryony', 'Seth', 'bryony.seth@gmail.com', '${await bcrypt.hash('123456', 10)}', 'images/bryony.jpg', NOW()),
-        ('Danilo', 'Oliveira', 'danilo.silta@gmail.com', '${await bcrypt.hash('123456', 10)}', 'images/danilo.jpg', NOW());`,
+        ('Bryony', 'Seth', 'bryony.seth@live.co.ok', '${await bcrypt.hash('123456', 10)}', 'images/bryony.jpg', NOW()),
+        ('Danilo', 'Silva', 'danilo.silva@live.com', '${await bcrypt.hash('123456', 10)}', 'images/danilo.jpg', NOW());`,
 
       // Insert fake trips
       `INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes) VALUES

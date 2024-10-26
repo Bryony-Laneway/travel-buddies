@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import PastTrips from "./pages/Past";
-import UpdateProfile from "./pages/Profile";
+import Profile from "./pages/Profile";
 import UpcomingTrips from "./pages/Upcoming";
 import SingleUpcomingTrip from "./pages/SingleUpcomingTrip";
 import { useState, useEffect } from "react";
@@ -37,28 +37,17 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
-          <Route
-            path="/login"
-            element={
-              user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
-            }
-          />
-          <Route
-            path="/signup"
-            element={user ? <Navigate to="/" /> : <SignUp />}
-          />
+          <Route path="/Login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}/>
+          <Route path="/Signup" element={user ? <Navigate to="/" /> : <SignUp />}/>
 
           {/* Protected Routes */}
-          {/* <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" />}> */}
-          <Route path="/" element={<Layout />}>
+          <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/Login" />}>
+          {/* <Route path="/" element={<Layout />}> */}
             <Route index element={<Home />} />
-            <Route path="/past" element={<PastTrips />} />
-            <Route path="/upcoming" element={<UpcomingTrips />} />
-            <Route
-              path="/SingleUpcomingTrip"
-              element={<SingleUpcomingTrip />}
-            />
-            <Route path="/profile" element={<UpdateProfile />} />
+            <Route path="/Upcoming" element={<UpcomingTrips />} />
+            <Route path="/Past" element={<PastTrips />} />
+            <Route path="/SingleUpcomingTrip" element={<SingleUpcomingTrip />} />
+            <Route path="/Profile" element={<Profile />} />
           </Route>
 
           {/* Catch-all for undefined routes */}

@@ -31,27 +31,27 @@ const Layout = ({ onLogout, user }) => {
                       <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li> */}
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <Link className="nav-link" to="/Upcoming">
                     Upcoming
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/past">
+                  <Link className="nav-link" to="/Past">
                     Past
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/photos">
+                  <Link className="nav-link" to="/Photos">
                     Photos
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/buddies">
+                  <Link className="nav-link" to="/Buddies">
                     Buddies
                   </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to="/profile">
+                <Link className="nav-link" to="/Profile">
                     <img
                       className="navbar-profile-pic"
                       src="./images/me.jpg"
@@ -60,7 +60,7 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li>
                 <li></li>
-                <button onClick={onLogout} className="btn btn-ouline-warning">
+                <button onClick={onLogout} className="btn btn-outline-warning">
                   Logout
                 </button>
               </ul>

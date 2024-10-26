@@ -87,7 +87,11 @@ function Profile() {
           width: "100%"
         }}>
           {user.profile_pic && (
-            <img src={user.profile_pic} alt="Profile" style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px" }} />
+            <img 
+              src={`http://localhost:3333/uploads/profile-pics/${user.profile_pic}`}
+              alt="Profile"
+              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px" }} 
+            />
           )}
           <input type="file" name="profile_pic" onChange={handleImageChange} style={{ marginBottom: "15px" }} />
 

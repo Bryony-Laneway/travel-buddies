@@ -1,7 +1,82 @@
 const express = require("express");
+const multer = require('multer');
+const path = require('path');
 const bcrypt = require("bcrypt");
 const db = require("../config/db");
 const router = express.Router();
+
+// Set up multer for profile picture uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads/profile-pics'));
+  },
+  filename: (req, file, cb) => {
+    const userId = req.params.id;
+    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '').slice(2); // YYMMDD
+    const timestamp = Date.now(); 
+    const ext = path.extname(file.originalname);
+    const newName = `${userId}-${date}-${timestamp}${ext}`;
+    cb(null, newName);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Upload Profile Picture
+router.post('/:id/profile-picture', upload.single('profile_pic'), (req, res) => {
+  const userId = req.params.id;
+  const profilePic = req.file ? req.file.filename : null;
+
+  console.log(profilePic)
+
+  if (!profilePic) {
+    return res.status(400).json({ message: 'No profile picture uploaded' });
+  }
+
+  const query = `
+    UPDATE users
+    SET profile_pic = ?
+    WHERE id = ?
+  `;
+  const values = [profilePic, userId];
+
+  db.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error updating profile picture in database:', error);
+      return res.status(500).json({ message: 'Error updating profile picture', error });
+    }
+
+    res.json({ 
+      message: 'Profile picture updated successfully', 
+      profile_pic: profilePic 
+    });
+  });
+});
+
+// Update User Information
+router.put('/:id', async (req, res) => {
+  const userId = req.params.id;
+  const { name, surname, email } = req.body;
+
+  const query = `
+    UPDATE users
+    SET name = ?, surname = ?, email = ?
+    WHERE id = ?
+  `;
+  const values = [name, surname, email, userId];
+
+  db.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error updating user in database:', error);
+      return res.status(500).json({ message: 'Error updating user', error });
+    }
+
+    res.json({ 
+      message: 'User updated successfully', 
+      user: { id: userId, name, surname, email } 
+    });
+  });
+});
 
 // Get all users (avoiding sensitive data like password_hash)
 router.get("/", (req, res) => {

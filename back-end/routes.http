@@ -42,3 +42,13 @@ Content-Type: application/json
   "email": "evandro.lugli@gmail.com",
   "newPassword": "123456"
 }
+
+### Update User
+PUT http://localhost:3333/users/1
+Content-Type: application/json
+
+{
+  "name": "Evandro",
+  "surname": "Lugli",
+  "email": "evandro.lugli@gmail.com"
+}

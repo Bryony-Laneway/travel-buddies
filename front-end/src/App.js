@@ -18,7 +18,7 @@ export default function App() {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser)); // Load user info from localStorage
-      // console.log("User loaded from localStorage:", savedUser); // Debugging
+      console.log("User loaded from localStorage:", savedUser); // Debugging
     }
   }, []);
 

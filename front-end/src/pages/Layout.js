@@ -6,14 +6,14 @@ const Layout = ({ onLogout, user }) => {
       <div>
         <nav className="navbar navbar-expand-lg fixed-top bg-body-white">
           <div className="container-fluid">
-            <a
+            <Link
               className="home-link"
-              href="/Home"
+              href="localhost:3000"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="./images/logo.png" alt="name" />
-            </a>
+            <img src="./images/logo.png" alt="name" />
+            </Link >
             <button
               className="navbar-toggler"
               type="button"
@@ -23,7 +23,7 @@ const Layout = ({ onLogout, user }) => {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarToggler">
               <ul className="navbar-nav mb-2 mb-lg-0">
@@ -31,33 +31,33 @@ const Layout = ({ onLogout, user }) => {
                       <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li> */}
                 <li className="nav-item">
-                  <a className="nav-link" href="/Upcoming">
+                  <a className="nav-link" href="#">
                     Upcoming
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/Past">
+                  <a className="nav-link" href="/past">
                     Past
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <Link className="nav-link" to="/photos">
                     Photos
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <Link className="nav-link" to="/buddies">
                     Buddies
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/Profile">
+                <Link className="nav-link" to="/profile">
                     <img
                       className="navbar-profile-pic"
                       src="./images/me.jpg"
                       alt="profile"
                     />
-                  </a>
+                  </Link>
                 </li>
                 <li></li>
                 <button onClick={onLogout} className="btn btn-ouline-warning">

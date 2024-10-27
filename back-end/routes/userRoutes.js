@@ -138,7 +138,7 @@ router.post("/login", async (req, res) => {
       }
 
       // Send back user info (or generate JWT token here)
-      res.json({ success: true, user: { id: user.id, name: user.name, email: user.email } });
+      res.json({ success: true, user: { id: user.id, name: user.name, surname: user.surname, email: user.email, profilePic: user.profile_pic } });
     });
   } catch (error) {
     console.error("Error logging in:", error);

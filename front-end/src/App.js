@@ -41,7 +41,7 @@ export default function App() {
           <Route path="/Signup" element={user ? <Navigate to="/" /> : <SignUp />}/>
 
           {/* Protected Routes */}
-          <Route path="/" element={user ? <Layout onLogout={handleLogout} /> : <Navigate to="/Login" />}>
+          <Route path="/" element={user ? <Layout onLogout={handleLogout} user={user} /> : <Navigate to="/Login" />}>
           {/* <Route path="/" element={<Layout />}> */}
             <Route index element={<Home />} />
             <Route path="/Upcoming" element={<UpcomingTrips />} />

@@ -52,11 +52,25 @@ const Layout = ({ onLogout, user }) => {
                 </li>
                 <li className="nav-item">
                 <Link className="nav-link" to="/Profile">
-                    <img
+                    {/* <img
                       className="navbar-profile-pic"
                       src="./images/me.jpg"
                       alt="profile"
-                    />
+                    /> */}
+                    {user && user.profilePic ? (
+                      <img 
+                        className="navbar-profile-pic"
+                        src={`http://localhost:3333/uploads/profile-pics/${user.profilePic}`}
+                        // src="http://localhost:3333/uploads/profile-pics/evandro.jpg"
+                        alt="Profile"
+                      />
+                    ) : (
+                      <img 
+                        className="navbar-profile-pic"
+                        src="http://localhost:3333/uploads/profile-pics/blank-avatar.jpg"
+                        alt="Profile"
+                      />
+                    )}
                   </Link>
                 </li>
                 <li></li>

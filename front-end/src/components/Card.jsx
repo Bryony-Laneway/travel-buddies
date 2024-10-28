@@ -6,7 +6,11 @@ export function Card(props) {
   // console.log(key);
   return (
     <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-4 mb-3">
-      <button onClick={GetSingleTrip(props.id)}>
+      {/* <button onClick={GetSingleTrip(props.id)}> */}
+      {/* youtube suggestion */}
+      {/* <button onClick={props.data}> */}
+      {/* article suggestion */}
+      <button key={props.id} onClick={() => this.handleclick(props.id)}>
         <Link to="/SingleUpcomingTrip">
           <div className="card" key={props.id} id={props.id}>
             <div className="card-body">

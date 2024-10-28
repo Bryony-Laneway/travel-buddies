@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function UpcomingTripsData() {
   const [upcomingTrips, setUpcomingTrips] = useState([]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetch("http://localhost:3333/trips");

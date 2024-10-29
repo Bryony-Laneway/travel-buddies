@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import UpcomingTripsData from "../components/UpcomingTrips";
 
 // handleclick method from article
-handleClick(props.id) {
-  this.setState({id: props.id});
-}
+// handleClick(props.id) {
+//   this.setState({id: props.id});
+// }
 
 // console.log(upcomingTrips.id);
 export function GetSingleTrip() {

@@ -6,7 +6,7 @@ const db = require("../config/db");
 const router = express.Router();
 
 // Set up multer for profile picture uploads
-const storage = multer.diskStorage({
+const profilePicStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../uploads/profile-pics'));
   },
@@ -20,15 +20,14 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const uploadProfilePic = multer({ storage: profilePicStorage });
 
 // Upload Profile Picture
-router.post('/:id/profile-picture', upload.single('profile_pic'), (req, res) => {
+router.post('/:id/profile-picture', uploadProfilePic.single('profile_pic'), (req, res) => {
   const userId = req.params.id;
   const profilePic = req.file ? req.file.filename : null;
-
-  console.log(profilePic)
-
+  
+  // console.log(profilePic)
   if (!profilePic) {
     return res.status(400).json({ message: 'No profile picture uploaded' });
   }
@@ -48,37 +47,57 @@ router.post('/:id/profile-picture', upload.single('profile_pic'), (req, res) => 
 
     res.json({ 
       message: 'Profile picture updated successfully', 
-      profile_pic: profilePic 
+      profilePic: profilePic
     });
   });
 });
 
-// Update User Information
-router.put('/:id', async (req, res) => {
+// Update User by Id
+router.put("/:id", async (req, res) => {
   const userId = req.params.id;
-  const { name, surname, email } = req.body;
+  const { name, surname, email, newPassword } = req.body;
 
-  const query = `
-    UPDATE users
-    SET name = ?, surname = ?, email = ?
-    WHERE id = ?
-  `;
-  const values = [name, surname, email, userId];
-
-  db.query(query, values, (error, results) => {
-    if (error) {
-      console.error('Error updating user in database:', error);
-      return res.status(500).json({ message: 'Error updating user', error });
+  try {
+    // Validate the new password if provided
+    if (newPassword && newPassword.length < 6) {
+      return res.status(400).json({ success: false, message: "Password must be at least 6 characters long" });
     }
 
-    res.json({ 
-      message: 'User updated successfully', 
+    // Start building the update query and values array
+    const updates = ["name = ?", "surname = ?", "email = ?"];
+    const values = [name, surname, email];
+
+    // If a new password is provided, hash it and include it in the update
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      updates.push("password_hash = ?");
+      values.push(hashedPassword);
+    }
+
+    values.push(userId); // Add userId to the end for the WHERE clause
+
+    // Construct the dynamic query
+    const query = `
+      UPDATE users
+      SET ${updates.join(", ")}
+      WHERE id = ?
+    `;
+
+    // Execute the query
+    await db.promise().query(query, values);
+
+    return res.json({ 
+      success: true, 
+      message: "User updated successfully", 
       user: { id: userId, name, surname, email } 
     });
-  });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ success: false, message: "An error occurred during the update" });
+  }
 });
 
-// Get all users (avoiding sensitive data like password_hash)
+// Get all users (avoiding password_hash)
 router.get("/", (req, res) => {
   const sql =
     "SELECT id, name, surname, email, profile_pic, created_at FROM users";
@@ -91,7 +110,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// Get a specific user by ID (avoiding sensitive data like password_hash)
+// Get user by ID (avoiding password_hash)
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT id, name, surname, email, profile_pic, created_at FROM users WHERE id = ?";
@@ -108,7 +127,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// User login route (authenticating users)
+// User login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -146,7 +165,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// User registration route (if needed)
+// User registration
 router.post("/register", async (req, res) => {
   const { name, surname, email, password } = req.body;
 
@@ -173,7 +192,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Endpoint for resetting password
+// Reset password
 router.post("/reset-password", async (req, res) => {
   const { email, newPassword } = req.body;
   //console.log("Request body:", req.body);

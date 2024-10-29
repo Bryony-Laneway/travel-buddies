@@ -140,7 +140,7 @@ export default function SignUp() {
             />
           </div>
 
-          <button type="submit" className="btn btn-warning w-100">
+          <button type="submit" className="btn btn-outline-warning w-100">
             Sign Up
           </button>
         </form>

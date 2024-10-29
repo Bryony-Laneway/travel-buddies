@@ -74,7 +74,7 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li>
                 <li></li>
-                <button onClick={onLogout} className="btn btn-outline-warning">
+                <button onClick={onLogout} className="btn btn-outline-danger">
                   Logout
                 </button>
               </ul>

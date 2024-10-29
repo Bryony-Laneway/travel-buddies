@@ -3,7 +3,16 @@
   --green-600: #2f9e44;
   --orange-500: #f76707;
   --orange-200: #f76707c3;
-  --link-font: font-family: "Balsamiq Sans", sans-serif;
+  --body-font: "Balsamiq Sans", sans-serif;
+  --link-font: "Balsamiq Sans", sans-serif;
+}
+
+body{
+  font-family: var(--body-font); 
+}
+
+a {
+  font-family: var(--link-font); 
 }
 
 .App {
@@ -151,7 +160,6 @@ h3 {
   font-family: "Balsamiq Sans", sans-serif;
   font-weight: 700;
   font-style: normal;
-
 }
 
 .btn-outline-warning:hover {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Profile() {
@@ -8,11 +8,14 @@ function Profile() {
     name: "",
     surname: "",
     email: "",
-    profile_pic: "",
-    oldPassword: "",
+    profilePic: "",
     newPassword: "",
     confirmPassword: ""
   });
+
+  const [displayedName, setDisplayedName] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -25,10 +28,21 @@ function Profile() {
   const fetchUserData = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3333/users/${id}`);
+      console.log(JSON.stringify(response.data, null, 2));
+
+      // Transform profile_pic to profilePic
+      const transformedData = {
+        ...response.data,
+        profilePic: response.data.profile_pic,
+      };
+      
       setUser((prevUser) => ({
         ...prevUser,
-        ...response.data
+        ...transformedData
       }));
+
+      setDisplayedName(transformedData.name);
+
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     }
@@ -36,32 +50,58 @@ function Profile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("E Target - Handle Change: " + e.target)
     setUser((prevUser) => ({
       ...prevUser,
       [name]: value
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setUser((prevUser) => ({ ...prevUser, profile_pic: reader.result }));
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("profile_pic", file);
+      try {
+        const response = await axios.post(`http://localhost:3333/users/${user.id}/profile-picture`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+        setUser((prevUser) => ({
+          ...prevUser,
+          profilePic: response.data.profilePic
+        }));
+        console.log("Profile picture updated successfully");
+      } catch (error) {
+        console.error("Failed to upload profile picture:", error);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (user.newPassword && user.newPassword !== user.confirmPassword) {
+      alert("New passwords do not match");
+      return;
+    }
+
     try {
-      await axios.put(`/api/users/${user.id}`, {
+      await axios.put(`http://localhost:3333/users/${user.id}`, {
         name: user.name,
         surname: user.surname,
         email: user.email,
-        profile_pic: user.profile_pic,
-        newPassword: user.newPassword,
-        oldPassword: user.oldPassword
+        newPassword: user.newPassword
       });
+      
+      setDisplayedName(user.name);
+      setSuccessMessage("Profile updated successfully!");
+
+      // Navigate back to home page after a delay
+      setTimeout(() => {
+        navigate("/"); // Use navigate to go back to home
+      }, 2000); // Delay of 2 seconds for the success message
+
       console.log("Profile updated successfully");
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -77,8 +117,20 @@ function Profile() {
       minHeight: "100vh"
     }}>
       <div className="Profile">
-        <h1 className="mt-5">Hello {user.name}</h1>
+        <h1 className="mt-5">Hello {displayedName}</h1>
 
+        {successMessage && (
+          <div style={{
+            backgroundColor: "lightgreen",
+            color: "green",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "15px"
+          }}>
+            {successMessage}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit} style={{
           display: "flex",
           flexDirection: "column",
@@ -86,14 +138,28 @@ function Profile() {
           maxWidth: "300px",
           width: "100%"
         }}>
-          {user.profile_pic && (
+          {user.profilePic ? (
             <img 
-              src={`http://localhost:3333/uploads/profile-pics/${user.profile_pic}`}
+              src={`http://localhost:3333/uploads/profile-pics/${user.profilePic}`}
               alt="Profile"
-              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px" }} 
+              onClick={() => document.getElementById("fileInput").click()}
+              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px", cursor: "pointer" }} 
+            />
+          ) : (
+            <img 
+              src={`http://localhost:3333/uploads/profile-pics/blank-avatar.jpg`}
+              alt="Profile"
+              onClick={() => document.getElementById("fileInput").click()}
+              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px", cursor: "pointer" }} 
             />
           )}
-          <input type="file" name="profile_pic" onChange={handleImageChange} style={{ marginBottom: "15px" }} />
+          <input 
+            type="file" 
+            id="fileInput" 
+            name="profile_pic" 
+            onChange={handleImageChange} 
+            style={{ display: "none" }} 
+          />
 
           <input
             type="text"
@@ -121,14 +187,6 @@ function Profile() {
           />
           <input
             type="password"
-            name="oldPassword"
-            placeholder="Old Password"
-            value={user.oldPassword}
-            onChange={handleChange}
-            style={{ marginBottom: "10px", width: "100%" }}
-          />
-          <input
-            type="password"
             name="newPassword"
             placeholder="New Password"
             value={user.newPassword}
@@ -143,11 +201,11 @@ function Profile() {
             onChange={handleChange}
             style={{ marginBottom: "20px", width: "100%" }}
           />
-          <button type="submit" style={{ width: "100%", marginBottom: "10px" }}>Save</button>
+          <button type="submit" className="btn btn-outline-success" style={{ width: "100%", marginBottom: "10px" }}>Save</button>
         </form>
 
         <Link to="/" className="link">
-          <button style={{ width: "100%" }}>Back</button>
+          <button className="btn btn-outline-warning" style={{ width: "100%" }}>Back</button>
         </Link>
       </div>
     </div>

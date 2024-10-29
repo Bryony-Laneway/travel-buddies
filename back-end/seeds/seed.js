@@ -168,9 +168,10 @@ const seedDatabase = async () => {
 
       // Insert fake photos
       `INSERT INTO photos (trip_id, user_id, photo_url, uploaded_at, publish) VALUES 
-        (1, 1, 'folder/photo1.jpg', NOW(), TRUE),
-        (1, 2, 'folder/photo2.jpg', NOW(), FALSE),
-        (2, 1, 'folder/photo3.jpg', NOW(), TRUE);`,
+        (1, 1, 'img-1.jpg', NOW(), TRUE),
+        (1, 2, 'img-2.jpg', NOW(), FALSE),
+        (2, 1, 'img-3.jpg', NOW(), TRUE),
+        (1, 2, 'img-3.jpg', NOW(), TRUE);`,
 
       // Insert fake fav_photos
       `INSERT INTO fav_photos (photo_id, user_id) VALUES 

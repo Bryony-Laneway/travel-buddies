@@ -101,7 +101,7 @@ export default function Login({ onLogin }) {
             placeholder="Enter your password"
           />
         </div>
-        <button type="submit" className="btn btn-warning w-100">Login</button>
+        <button type="submit" className="btn btn-outline-success w-100">Login</button>
       </form>
 
       <div className="mt-3">
@@ -115,7 +115,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <Link to="/signup">
-        <button className="btn btn-success mt-4">Sign Up</button>
+        <button className="btn btn-outline-warning mt-4">Sign Up</button>
       </Link>
 
       {/* Reset Password Modal */}
@@ -173,7 +173,7 @@ export default function Login({ onLogin }) {
                 <button
                   type="button"
                   onClick={handlePasswordReset}
-                  className="btn btn-warning w-100"
+                  className="btn btn-outline-success w-100"
                 >
                   Reset Password
                 </button>

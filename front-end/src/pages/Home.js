@@ -2,6 +2,7 @@ import UpcomingTrips from "../components/UpcomingTrips";
 import Card from "../components/Card";
 import PastCard from "../components/PastCard";
 import PastTrips from "../components/PastTrips";
+import Buddies from "../components/Buddies";
 
 function CreateCard(upcoming) {
   return (
@@ -43,41 +44,10 @@ const Home = () => {
           <h3 className="col-10 mt-5">Past Trips</h3>
         </div>
         <div className="row">{past.map(CreatePastCard)}</div>
-        <div className="row mb-5">
-          <h3 className="col-10 mt-5">My Buddies</h3>
-        </div>
-        <div className="buddies-section mb-5">
-          <img
-            src="./images/me.jpg"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-          <img
-            src="./images/e.jpg"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-          <img
-            src="./images/ev.jpg"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-          <img
-            src="./images/evandro.jpg"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-          <img
-            src="./images/b.jpg"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-          <img
-            src="./images/bryony.PNG"
-            alt="buddies"
-            className="buddies-profile-pic mx-3 mb-2"
-          />
-        </div>
+        
+
+        <Buddies />
+
       </div>
     </div>
   );

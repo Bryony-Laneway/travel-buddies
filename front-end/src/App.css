@@ -1,18 +1,20 @@
 :root {
+  --green-50: #edf4e1;
   --green-300: #a9e34b;
   --green-600: #2f9e44;
   --orange-500: #f76707;
   --orange-200: #f76707c3;
+  --orange-50: #e9905542;
   --body-font: "Balsamiq Sans", sans-serif;
   --link-font: "Balsamiq Sans", sans-serif;
 }
 
-body{
-  font-family: var(--body-font); 
+body {
+  font-family: var(--body-font);
 }
 
 a {
-  font-family: var(--link-font); 
+  font-family: var(--link-font);
 }
 
 .App {
@@ -61,7 +63,6 @@ a {
 .btn-success:hover {
   background-color: var(--green-600);
   color: white;
- 
 }
 
 .link {
@@ -148,6 +149,32 @@ h3 {
   color: var(--green-600);
   width: auto;
   float: left;
+}
+
+h5 {
+  color: var(--green-600);
+  margin-top: 40px;
+}
+
+.italic {
+  font-style: italic;
+}
+.input {
+  height: 35px;
+  border: 1px solid var(--green-300);
+  color: var(--green-600);
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.single {
+  /* border: 1px solid var(--orange-500); */
+  border: 1px solid var(--green-600);
+  border-radius: 10px;
+  /* background-color: var(--orange-50); */
+  background-color: var(--green-50);
+  text-align: center;
+  padding: 60px 30px;
 }
 
 .add {

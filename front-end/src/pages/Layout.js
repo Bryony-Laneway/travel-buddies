@@ -12,8 +12,8 @@ const Layout = ({ onLogout, user }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-            <img src="./images/logo.png" alt="name" />
-            </Link >
+              <img src="./images/logo.png" alt="name" />
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -23,7 +23,7 @@ const Layout = ({ onLogout, user }) => {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-            <span className="navbar-toggler-icon"></span>
+              <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarToggler">
               <ul className="navbar-nav mb-2 mb-lg-0">
@@ -51,15 +51,15 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to="/Profile">
+                  <Link className="nav-link" to="/Profile">
                     {user && user.profilePic ? (
-                      <img 
+                      <img
                         className="navbar-profile-pic"
                         src={`http://localhost:3333/uploads/profile-pics/${user.profilePic}`}
                         alt="Profile"
                       />
                     ) : (
-                      <img 
+                      <img
                         className="navbar-profile-pic"
                         src="http://localhost:3333/uploads/profile-pics/blank-avatar.jpg"
                         alt="Profile"
@@ -67,18 +67,24 @@ const Layout = ({ onLogout, user }) => {
                     )}
                   </Link>
                 </li>
-                <li></li>
-                <button onClick={onLogout} className="btn btn-outline-danger">
-                  Logout
-                </button>
+                <li>
+                  <button
+                    onClick={onLogout}
+                    className="btn btn-outline-warning mt-2"
+                  >
+                    Logout
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
         </nav>
       </div>
-
-      <Outlet />
-
+      <div className="container">
+        <div className="content col-10 mx-auto">
+          <Outlet />
+        </div>
+      </div>
       <footer className="footer mt-5">
         <div className="row mt-5">
           <img src="./images/logo.png" alt="logo" className="footer-logo" />

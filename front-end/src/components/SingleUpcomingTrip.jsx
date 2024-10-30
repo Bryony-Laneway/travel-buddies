@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import UpcomingTripsData from "../components/UpcomingTrips";
+import { openTrip } from "./Card";
 
-// handleclick method from article
-// handleClick(props.id) {
-//   this.setState({id: props.id});
-// }
-
+console.log(openTrip);
 // console.log(upcomingTrips.id);
-export function GetSingleTrip() {
+export function GetSingleTrip(openTrip) {
   const upcomingTrips = UpcomingTripsData();
   console.log(upcomingTrips);
   //   var trip_id = id;
@@ -17,9 +14,7 @@ export function GetSingleTrip() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(
-        "http://localhost:3333/trips/" + upcomingTrips.id
-      );
+      const result = await fetch("http://localhost:3333/trips/" + openTrip);
       const jsonResult = await result.json();
       setSingleUpTrip(jsonResult);
     };

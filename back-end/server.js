@@ -22,7 +22,7 @@ app.use(
         callback(new Error("Not allowed - CORS"));
       }
     },
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

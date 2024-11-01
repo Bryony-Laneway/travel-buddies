@@ -50,7 +50,9 @@ export default function SignUp() {
 
       const data = await response.json();
       if (response.ok) {
-        setSuccessMessage("Registration successful! Your user ID is " + data.userId);
+        setSuccessMessage(
+          "Registration successful! Your user ID is " + data.userId
+        );
       } else {
         setError(data.message || "Registration failed.");
       }
@@ -67,16 +69,21 @@ export default function SignUp() {
         <h2>Sign Up</h2>
 
         {error && <div className="alert alert-danger">{error}</div>}
-        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
 
-        <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: "400px" }}>
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto"
+          style={{ maxWidth: "400px" }}
+        >
           <div className="mb-3">
-            <label htmlFor="name">First Name</label>
             <input
               type="text"
               name="name"
               id="name"
-              className="form-control"
+              className="form-control login-input"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -85,12 +92,11 @@ export default function SignUp() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="surname">Surname</label>
             <input
               type="text"
               name="surname"
               id="surname"
-              className="form-control"
+              className="form-control login-input"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
               required
@@ -99,12 +105,11 @@ export default function SignUp() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="email">Email Address</label>
             <input
               type="email"
               name="email"
               id="email"
-              className="form-control"
+              className="form-control login-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -113,12 +118,11 @@ export default function SignUp() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password">Create Password</label>
             <input
               id="password"
               type="password"
               name="password"
-              className="form-control"
+              className="form-control login-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -127,12 +131,11 @@ export default function SignUp() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password2">Re-enter Password</label>
             <input
               id="password2"
               type="password"
               name="password2"
-              className="form-control"
+              className="form-control login-input"
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
               required
@@ -140,7 +143,7 @@ export default function SignUp() {
             />
           </div>
 
-          <button type="submit" className="btn btn-outline-warning w-100">
+          <button type="submit" className="btn btn-outline-warning">
             Sign Up
           </button>
         </form>

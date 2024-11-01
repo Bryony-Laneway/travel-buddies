@@ -128,7 +128,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <Link to="/signup">
-        <button className="btn btn-outline-success mt-4">Sign Up</button>
+        <button className="btn btn-success mt-4">Sign Up</button>
       </Link>
 
       {/* Reset Password Modal */}

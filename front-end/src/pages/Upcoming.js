@@ -1,25 +1,30 @@
-import Card from "../components/Card";
-import UpcomingTripsData from "../components/UpcomingTrips";
+import { useEffect, useState } from "react";
+import UpcomingCard from "../components/UpcomingCard";
+import { getPastTrips } from "../services/api"; // Import the API function
 
 function UpcomingTrips() {
-  const upcomingTrips = UpcomingTripsData();
-  console.log(upcomingTrips);
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  function CreateCard(upcomingTrips) {
-    return (
-      <Card
-        key={upcomingTrips.id}
-        id={upcomingTrips.id}
-        name={upcomingTrips.trip_name}
-        host={upcomingTrips.host_name}
-        date={upcomingTrips.start_date}
-      />
-    );
-  }
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const data = await getPastTrips(); // Call the API function
+        setUpcomingTrips(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrips();
+  }, []);
+
+  if (loading) return <p>Loading...</p>; // Show loading state
+  if (error) return <p>Error: {error}</p>; // Show error state
 
   return (
-    // <div className="container">
-    //   <div className="content col-10 mx-auto">
     <>
       <div className="row mb-5">
         <div className="col">
@@ -29,12 +34,20 @@ function UpcomingTrips() {
           <button className="btn btn-outline-warning add">Create Trip</button>
         </div>
       </div>
-      <div className="upcoming-Trips-container">
-        <div className="row">{upcomingTrips.map(CreateCard)}</div>
+      <div className="upcoming-trips-container">
+        <div className="row">
+          {upcomingTrips.map((trip) => (
+            <UpcomingCard
+              key={trip.id}
+              tripId={trip.id}
+              name={trip.trip_name}
+              host={trip.host_name}
+              date={trip.start_date}
+            />
+          ))}
+        </div>
       </div>
     </>
-    //   </div>
-    // </div>
   );
 }
 

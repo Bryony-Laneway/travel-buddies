@@ -68,10 +68,7 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li>
                 <li>
-                  <button
-                    onClick={onLogout}
-                    className="btn btn-outline-warning mt-2"
-                  >
+                  <button onClick={onLogout} className="btn btn-outline-warning mt-2">
                     Logout
                   </button>
                 </li>

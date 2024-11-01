@@ -1,24 +1,28 @@
+import { useEffect, useState } from "react";
 import PastCard from "../components/PastCard";
-import PastTripsData from "../components/PastTrips";
+import { getPastTrips } from "../services/api";
 
 function PastTrips() {
-  const pastTrips = PastTripsData();
-  console.log(pastTrips);
+  const [pastTrips, setPastTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  function CreateCard(pastTrips) {
-    // var tripdate = pastTrips.start_date;
-    // var tripyear = tripdate.getMonth();
-    return (
-      <PastCard
-        key={pastTrips.id}
-        id={pastTrips.id}
-        name={pastTrips.trip_name}
-        date={pastTrips.start_date}
-        host={pastTrips.host_name}
-        img={pastTrips.photo}
-      />
-    );
-  }
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const data = await getPastTrips();
+        setPastTrips(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrips();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <>
@@ -27,8 +31,19 @@ function PastTrips() {
           <h3 className="">Past Trips</h3>
         </div>
       </div>
-      <div className="past-Trips-container">
-        <div className="row">{pastTrips.map(CreateCard)}</div>
+      <div className="past-trips-container">
+        <div className="row">
+          {pastTrips.map((trip) => (
+            <PastCard
+              key={trip.id}
+              tripId={trip.id}
+              name={trip.trip_name}
+              date={trip.start_date}
+              host={trip.host_name}
+              img={trip.photo}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

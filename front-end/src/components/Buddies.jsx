@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Buddies = () => {
+export function Buddies() {
   const [buddies, setBuddies] = useState([]);
   const loggedInUserId = JSON.parse(localStorage.getItem('user')).id;
 

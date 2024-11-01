@@ -25,9 +25,8 @@ export function MyHeader() {
           <div className="collapse navbar-collapse" id="navbarToggler">
             <ul className="navbar-nav mb-2 mb-lg-0">
               {/* <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li> */}
-
+                  <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li> */}
               <li className="nav-item">
                 <a className="nav-link" href="#">
                   Upcoming

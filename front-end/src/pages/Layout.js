@@ -146,13 +146,13 @@ const Layout = ({ onLogout, user }) => {
       </div>
 
       <div
-        className="modal fade"
+        className="modal fade scrollable modal-open-scroll modal-lg"
         id="privacyModal"
         tabindex="-1"
         aria-labelledby="privacyModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-scrollable">
+        <div className="modal-dialog modal-dialog-scrollable mt-0 mb-0">
           <div className="mode-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="privacyModalLabel">
@@ -165,7 +165,31 @@ const Layout = ({ onLogout, user }) => {
                 aria-label="close"
               ></button>
             </div>
-            <div className="modal-body"></div>
+            <div className="modal-body modal-body-scrollable">
+              <p>
+                Travel Buddies is committed to providing quality services to you
+                and this policy outlines our ongoing obligations to you in
+                respect of how we manage your Personal Information. We have
+                adopted the Australian Privacy Principles (APPs) contained in
+                the Privacy Act 1988 (Cth) (the Privacy Act). The NPPs govern
+                the way in which we collect, use, disclose, store, secure and
+                dispose of your Personal Information. A copy of the Australian
+                Privacy Principles may be obtained from the website of The
+                Office of the Australian Information Commissioner at
+                https://www.oaic.gov.au/.
+              </p>
+              <p>
+                Your Personal Information may be disclosed in a number of
+                circumstances including the following: • Third parties where you
+                consent to the use or disclosure; and • Where required or
+                authorised by law.
+              </p>
+              <p>
+                If you have any queries or complaints about our Privacy Policy
+                please contact us at: Travel Buddies, travelbuddies@outlook.com,
+                0432 123 456
+              </p>
+            </div>
           </div>
         </div>
       </div>

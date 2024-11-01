@@ -2,33 +2,51 @@ import { Link } from "react-router-dom";
 // import { GetSingleTrip } from "./SingleUpcomingTrip";
 // import { handleClick } from "./SingleUpcomingTrip";
 import { useState, useEffect } from "react";
+// import { API } from "./SingleUpcomingTrip";
 
 // export function openTrip(tripId) {
 //   // return JSON.parse(tripId);
 // }
 
 export function Card(props) {
-  const [singleUpcomingTrip, setSingleUpcomingTrip] = useState([]);
-  console.log("Hello");
-  console.log(props.id);
-  var id = props[0].id;
-  console.log("id is " + id);
-  function API() {
-    // const [id, setId] = useState(props.id);
+  // const id = props.id;
+  // const [singleUpcomingTrip, setSingleUpcomingTrip] = useState([]);
+  // const [data, setData] = useState(null);
 
-    //   console.log("API request: " + trip_id);
-    // var id = props.id;
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await fetch("http://localhost:3333/trips/" + id);
-        const jsonResult = await result.json();
-        setSingleUpcomingTrip(jsonResult);
-      };
-      fetchData();
-    });
+  // // console.log("Hello");
+  // // console.log(props.id);
+  // // var id = props[0].id;
+  // // console.log("id is " + id);
+  // useEffect(() => {
+  //   let ignore = false;
+  //   setData(null);
+  //   API(id).then((result) => {
+  //     if (!ignore) {
+  //       setData(result);
+  //     }
+  //   });
+  //   return () => {
+  //     ignore = true;
+  //     console.log(data);
+  //   };
+  // });
 
-    return singleUpcomingTrip;
-  }
+  // function API(data) {
+  //   // const [id, setId] = useState(props.id);
+
+  //   //   console.log("API request: " + trip_id);
+  //   // var id = props.id;
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const result = await fetch("http://localhost:3333/trips/" + data);
+  //       const jsonResult = await result.json();
+  //       setSingleUpcomingTrip(jsonResult);
+  //     };
+  //     fetchData();
+  //   });
+
+  //   return singleUpcomingTrip;
+  // }
   // return props.id;
   // handleclick method from article
   // const tripId = props.id;
@@ -57,7 +75,7 @@ export function Card(props) {
       {/* article suggestion */}
       {/* <button key={props.id} onClick={() => this.handleClick(props.id)}> */}
       {/* <button key={tripID} onClick={handleClick(tripID)}> */}
-      <button key={props.id} name={props.id} id={props.id} onClick={API}>
+      <button key={props.id} name={props.id} id={props.id}>
         {/* //put onclick in button?? or wrapping div?? */}
         {/* <Link to="/SingleUpcomingTrip"> */}
         <div className="card">

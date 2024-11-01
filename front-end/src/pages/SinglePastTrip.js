@@ -6,6 +6,8 @@ const SinglePastTrip = () => {
   const data = GetSinglePastTripData();
   const favPlaces = GetFavouritePlaces();
   console.log(favPlaces);
+  console.log(GetFavouritePlaces());
+  // console.log(JSON.(favPlaces));
 
   const [name, setName] = useState("");
   const [id] = useState("");
@@ -82,7 +84,7 @@ const SinglePastTrip = () => {
           <div className="fav-places-art">
             <p>{favPlaces.name}</p>
           </div>
-          <p>List of the favourite places: {favPlaces.name}</p>
+          <p>List of the favourite places: {favPlaces[name]}</p>
           <form onSubmit={handleSubmit}>
             <input
               className="input"

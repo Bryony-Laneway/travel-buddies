@@ -44,7 +44,8 @@ export default function Login({ onLogin }) {
     if (resetPassword.length < 6) errorMessages.push("Password is too short.");
     //if (!/[A-Z]/.test(resetPassword)) errorMessages.push("Must include a capital letter.");
     //if (!/\d/.test(resetPassword)) errorMessages.push("Must include a number.");
-    if (resetPassword !== resetPassword2) errorMessages.push("Passwords must match.");
+    if (resetPassword !== resetPassword2)
+      errorMessages.push("Passwords must match.");
 
     if (errorMessages.length) {
       setResetError(errorMessages.join(" "));
@@ -52,17 +53,25 @@ export default function Login({ onLogin }) {
     }
 
     try {
-      const response = await fetch("http://localhost:3333/users/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: resetEmail, newPassword: resetPassword }),
-      });
+      const response = await fetch(
+        "http://localhost:3333/users/reset-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: resetEmail,
+            newPassword: resetPassword,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
-        setSuccessMessage("Password reset successfully. Please log in with your new password.");
+        setSuccessMessage(
+          "Password reset successfully. Please log in with your new password."
+        );
       } else {
         setResetError(data.message || "Password reset failed.");
       }
@@ -78,12 +87,15 @@ export default function Login({ onLogin }) {
 
       {error && <p className="text-danger">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: "400px" }}>
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto"
+        style={{ maxWidth: "400px" }}
+      >
         <div className="mb-3">
-          <label>Email</label>
           <input
             type="email"
-            className="form-control"
+            className="form-control login-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -91,31 +103,32 @@ export default function Login({ onLogin }) {
           />
         </div>
         <div className="mb-3">
-          <label>Password</label>
           <input
             type="password"
-            className="form-control"
+            className="form-control login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="Enter your password"
           />
         </div>
-        <button type="submit" className="btn btn-outline-success w-100">Login</button>
+        <button type="submit" className="btn btn-outline-warning">
+          Login
+        </button>
       </form>
 
       <div className="mt-3">
         <a
           href="#ForgotPasswordModal"
           data-bs-toggle="modal"
-          className="text-info"
+          className="forgotton-link"
         >
           Forgot Password?
         </a>
       </div>
 
       <Link to="/signup">
-        <button className="btn btn-outline-warning mt-4">Sign Up</button>
+        <button className="btn btn-outline-success mt-4">Sign Up</button>
       </Link>
 
       {/* Reset Password Modal */}
@@ -129,19 +142,28 @@ export default function Login({ onLogin }) {
         <div className="modal-dialog modal-dialog-centered modal-sm">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="ForgotPasswordModalLabel">Reset Password</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+              <h5 className="modal-title" id="ForgotPasswordModalLabel">
+                Reset Password
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
             </div>
             <div className="modal-body">
-              {resetError && <div className="alert alert-danger">{resetError}</div>}
-              {successMessage && <div className="alert alert-success">{successMessage}</div>}
+              {resetError && (
+                <div className="alert alert-danger">{resetError}</div>
+              )}
+              {successMessage && (
+                <div className="alert alert-success">{successMessage}</div>
+              )}
 
               <form>
                 <div className="mb-3">
-                  <label>Email</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="form-control login-input"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
                     required
@@ -149,10 +171,9 @@ export default function Login({ onLogin }) {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>New Password</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className="form-control login-input"
                     value={resetPassword}
                     onChange={(e) => setResetPassword(e.target.value)}
                     required
@@ -160,10 +181,9 @@ export default function Login({ onLogin }) {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Confirm Password</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className="form-control login-input"
                     value={resetPassword2}
                     onChange={(e) => setResetPassword2(e.target.value)}
                     required
@@ -173,7 +193,7 @@ export default function Login({ onLogin }) {
                 <button
                   type="button"
                   onClick={handlePasswordReset}
-                  className="btn btn-outline-success w-100"
+                  className="btn btn-outline-warning"
                 >
                   Reset Password
                 </button>

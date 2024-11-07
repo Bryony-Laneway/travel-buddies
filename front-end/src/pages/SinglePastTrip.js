@@ -16,6 +16,16 @@ const SinglePastTrip = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [file, setFile] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      const { id } = JSON.parse(storedUser);
+      setUserId(id);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +48,7 @@ const SinglePastTrip = () => {
     setSuccessMessage(null);
 
     try {
-      await addFavouritePlace({ name });
+      await addFavouritePlace({ name, user_id: userId, trip_id: tripId });
       setSuccessMessage("Place added!");
       setFavPlaces([...favPlaces, { name }]); // Update fav places with new entry
     } catch (err) {

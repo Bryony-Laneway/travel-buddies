@@ -10,6 +10,7 @@ import UpcomingTrips from "./pages/Upcoming";
 import SingleUpcomingTrip from "./pages/SingleUpcomingTrip";
 import { useState, useEffect } from "react";
 import SinglePastTrip from "./pages/SinglePastTrip";
+import CreateTrip from "./pages/CreateTrip";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -38,18 +39,42 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
-          <Route path="/Login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}/>
-          <Route path="/Signup" element={user ? <Navigate to="/" /> : <SignUp />} />
+          <Route
+            path="/Login"
+            element={
+              user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+            }
+          />
+          <Route
+            path="/Signup"
+            element={user ? <Navigate to="/" /> : <SignUp />}
+          />
 
           {/* Protected Routes */}
-          <Route path="/" element={user ? (<Layout onLogout={handleLogout} user={user} />) : (<Navigate to="/Login" />)}>
+          <Route
+            path="/"
+            element={
+              user ? (
+                <Layout onLogout={handleLogout} user={user} />
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }
+          >
             {/* <Route path="/" element={<Layout />}> */}
             <Route index element={<Home />} />
             <Route path="/Upcoming" element={<UpcomingTrips />} />
             <Route path="/Past" element={<PastTrips />} />
             <Route path="/Profile" element={<Profile />} />
-            <Route path="/SingleUpcomingTrip/:tripId" element={<SingleUpcomingTrip />} />
-            <Route path="/SinglePastTrip/:tripId" element={<SinglePastTrip />} />
+            <Route
+              path="/SingleUpcomingTrip/:tripId"
+              element={<SingleUpcomingTrip />}
+            />
+            <Route
+              path="/SinglePastTrip/:tripId"
+              element={<SinglePastTrip />}
+            />
+            <Route path="/CreateTrip" element={<CreateTrip />} />
           </Route>
 
           {/* Catch-all for undefined routes */}

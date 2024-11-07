@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import UpcomingCard from "../components/UpcomingCard";
 import { getPastTrips } from "../services/api"; // Import the API function
+import { Link } from "react-router-dom";
 
 function UpcomingTrips() {
   const [upcomingTrips, setUpcomingTrips] = useState([]);
@@ -31,7 +32,9 @@ function UpcomingTrips() {
           <h3 className="">Upcoming Trips</h3>
         </div>
         <div className="col">
-          <button className="btn btn-outline-warning add">Create Trip</button>
+          <Link to="/CreateTrip">
+            <button className="btn btn-outline-warning add">Create Trip</button>
+          </Link>
         </div>
       </div>
       <div className="upcoming-trips-container">

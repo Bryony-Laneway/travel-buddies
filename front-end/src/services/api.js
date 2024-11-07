@@ -1,4 +1,3 @@
-
 // Get all trips
 export async function getPastTrips() {
   try {
@@ -26,7 +25,9 @@ export async function getSinglePastTrip(id) {
 // Get all favorite places for a specific trip
 export async function getFavouritePlaces(tripId) {
   try {
-    const response = await fetch(`http://localhost:3333/trips/places/${tripId}`);
+    const response = await fetch(
+      `http://localhost:3333/trips/places/${tripId}`
+    );
     if (!response.ok) throw new Error("Failed to fetch favorite places");
     return await response.json();
   } catch (error) {
@@ -38,7 +39,7 @@ export async function getFavouritePlaces(tripId) {
 // Add a new favorite place
 export async function addFavouritePlace(placeData) {
   try {
-    const response = await fetch(`http://localhost:3333/trips/places/id`, {
+    const response = await fetch(`http://localhost:3333/trips/places/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

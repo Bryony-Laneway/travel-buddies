@@ -36,7 +36,7 @@ const SingleUpcomingTrip = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setSuccessMessage(null);
+    setSuccessMessage();
 
     try {
       await addFavouritePlace({ name });

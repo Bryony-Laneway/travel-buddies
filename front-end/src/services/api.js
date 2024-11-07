@@ -10,6 +10,27 @@ export async function getPastTrips() {
   }
 }
 
+// Add new trip
+export async function addNewTrip(tripData) {
+  console.log("from api file: " + tripData);
+  console.log(JSON.stringify(tripData));
+  try {
+    const response = await fetch(`http://localhost:3333/trips`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tripData),
+    });
+
+    if (!response.ok) throw new Error("Failed to create trip");
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating trip:", error);
+    throw error;
+  }
+}
+
 // Get a single trip by ID
 export async function getSinglePastTrip(id) {
   try {

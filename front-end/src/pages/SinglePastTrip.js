@@ -1,6 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getSinglePastTrip, getFavouritePlaces, addFavouritePlace } from "../services/api";
+import {
+  getSinglePastTrip,
+  getFavouritePlaces,
+  addFavouritePlace,
+} from "../services/api";
 
 const SinglePastTrip = () => {
   const { tripId } = useParams();
@@ -17,9 +21,9 @@ const SinglePastTrip = () => {
     const fetchData = async () => {
       try {
         const trip = await getSinglePastTrip(tripId);
-        //const places = await getFavouritePlaces(); // Pass ID if needed
+        const places = await getFavouritePlaces(tripId); // Pass ID if needed
         setTripData(trip);
-        //setFavPlaces(places);
+        setFavPlaces(places);
       } catch (err) {
         setError("Failed to load trip data.");
       }
@@ -60,7 +64,9 @@ const SinglePastTrip = () => {
       <div className="content col-10 mx-auto single">
         <div>
           <h3 className="w-100">{tripData.trip_name}</h3>
-          <h6><strong>{tripData.start_date}</strong></h6>
+          <h6>
+            <strong>{tripData.start_date}</strong>
+          </h6>
           <p className="italic">
             <strong>Hosted By:</strong> {tripData.host_name},{" "}
             <strong>Co-hosted by:</strong> {tripData.co_host_name}
@@ -104,7 +110,9 @@ const SinglePastTrip = () => {
             </button>
           </form>
           {error && <div className="alert alert-danger">{error}</div>}
-          {successMessage && <div className="alert alert-success">{successMessage}</div>}
+          {successMessage && (
+            <div className="alert alert-success">{successMessage}</div>
+          )}
         </div>
       </div>
     </div>

@@ -39,6 +39,7 @@ const seedDatabase = async () => {
       "DROP TABLE IF EXISTS packing_list;",
       "DROP TABLE IF EXISTS fav_places;",
       "DROP TABLE IF EXISTS trips;",
+      "DROP TABLE IF EXISTS friends;",
       "DROP TABLE IF EXISTS users;",
 
       // Create the users table
@@ -51,6 +52,17 @@ const seedDatabase = async () => {
         profile_pic VARCHAR(150),
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       );`,
+
+       // Create the friends table
+      `CREATE TABLE friends (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT NOT NULL,
+        friend_id INT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (friend_id) REFERENCES users(id),
+        UNIQUE KEY unique_friendship (user_id, friend_id)
+    );`,
 
       // Create the trips table
       `CREATE TABLE trips (
@@ -132,9 +144,10 @@ const seedDatabase = async () => {
 
       // Insert fake users
       `INSERT INTO users (name, surname, email, password_hash, profile_pic, created_at) VALUES
-        ('Evandro', 'Lugli', 'evandro.lugli@gmail.com', '${await bcrypt.hash('123456', 10)}', 'evandro.jpg', NOW()),
+        ('Evandro', 'Lugli', 'ev@gmail.com', '${await bcrypt.hash('123456', 10)}', 'evandro.jpg', NOW()),
         ('Bryony', 'Seth', 'bryony.seth@live.co.uk', '${await bcrypt.hash('123456', 10)}', 'bryony.jpg', NOW()),
-        ('Danilo', 'Silva', 'danilo.silva@live.com', '${await bcrypt.hash('123456', 10)}', 'danilo.jpg', NOW());`,
+        ('Mona', 'Lisa', 'ml@gmail.com', '${await bcrypt.hash('123456', 10)}', 'monalisa.jpg', NOW()),
+        ('Chuck', 'Norris', 'cn@gmail.com', '${await bcrypt.hash('123456', 10)}', 'chuck-norris.jpg', NOW());`,
 
       // Insert fake trips
       `INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes) VALUES
@@ -177,7 +190,13 @@ const seedDatabase = async () => {
       `INSERT INTO fav_photos (photo_id, user_id) VALUES 
         (1, 1),
         (2, 1),
-        (3, 2);`
+        (3, 2);`,
+
+      // Insert fake friends
+      `INSERT INTO friends (user_id, friend_id, created_at) VALUES
+        (1, 2, NOW()),
+        (1, 3, NOW()),
+        (2, 3, NOW());`
     ];
 
     // Execute each SQL command one by one

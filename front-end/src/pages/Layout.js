@@ -8,11 +8,10 @@ const Layout = ({ onLogout, user }) => {
           <div className="container-fluid">
             <Link
               className="home-link"
-              href="localhost:3000"
-              target="_blank"
               rel="noopener noreferrer"
+              to="/"
             >
-              <img src="./images/logo.png" alt="name" />
+            <img src="./images/logo.png" alt="name" />
             </Link>
             <button
               className="navbar-toggler"
@@ -27,9 +26,6 @@ const Layout = ({ onLogout, user }) => {
             </button>
             <div className="collapse navbar-collapse" id="navbarToggler">
               <ul className="navbar-nav mb-2 mb-lg-0">
-                {/* <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li> */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/Upcoming">
                     Upcoming

@@ -22,7 +22,7 @@ app.use(
         callback(new Error("Not allowed - CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -42,6 +42,7 @@ app.use(express.json());
 
 const userRoutes = require("./routes/userRoutes");
 const tripRoutes = require("./routes/tripRoutes");
+const friendRoutes = require("./routes/friendRoutes");
 
 // Middleware and routes
 app.get("/", function (req, res) {
@@ -50,6 +51,7 @@ app.get("/", function (req, res) {
 
 app.use("/users", userRoutes);
 app.use("/trips", tripRoutes);
+app.use("/friends", friendRoutes);
 app.use("/places", tripRoutes);
 
 app.listen(PORT, () => {

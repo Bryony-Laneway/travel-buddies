@@ -71,45 +71,6 @@ router.get("/", (req, res) => {
   });
 });
 
-// // Create New Trip
-// router.post("/", async (req, res) => {
-//   const {
-//     host_id,
-//     co_host_id,
-//     trip_name,
-//     start_date,
-//     end_date,
-//     created_at,
-//     updated_at,
-//     itinerary,
-//     notes,
-//   } = req.body;
-//   console.log("request :" + req.body);
-//   const sql = `
-//     INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes)
-//     VALUES (?, ?, ?, NOW(), NOW(), NOW(), NOW(), ?, ?)`;
-
-//   const values = [
-//     host_id,
-//     co_host_id,
-//     trip_name,
-//     start_date,
-//     end_date,
-//     created_at,
-//     updated_at,
-//     itinerary,
-//     notes,
-//   ];
-
-//   db.query(sql, (err, results) => {
-//     if (err) {
-//       console.error("Error executing SQL:", err);
-//       return res.status(500).json({ error: "Database query failed" });
-//     }
-//     res.json(results);
-//   });
-// });
-
 // Get all trips by host_id
 router.get("/host/:host_id", (req, res) => {
   const { host_id } = req.params; // Extract host_id from URL parameters

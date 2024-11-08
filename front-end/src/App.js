@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
+import { useState, useEffect } from "react";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import PastTrips from "./pages/Past";
-import Profile from "./pages/Profile";
 import UpcomingTrips from "./pages/Upcoming";
+import Buddies from "./pages/Buddies";
+import Profile from "./pages/Profile";
 import SingleUpcomingTrip from "./pages/SingleUpcomingTrip";
-import { useState, useEffect } from "react";
 import SinglePastTrip from "./pages/SinglePastTrip";
 import CreateTrip from "./pages/CreateTrip";
 
@@ -20,7 +21,7 @@ export default function App() {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser)); // Load user info from localStorage
-      console.log("User loaded from localStorage:", savedUser); // Debugging
+      // console.log("User loaded from localStorage:", savedUser); // Debugging
     }
   }, []);
 
@@ -51,29 +52,15 @@ export default function App() {
           />
 
           {/* Protected Routes */}
-          <Route
-            path="/"
-            element={
-              user ? (
-                <Layout onLogout={handleLogout} user={user} />
-              ) : (
-                <Navigate to="/Login" />
-              )
-            }
-          >
+          <Route path="/" element={user ? (<Layout onLogout={handleLogout} user={user} /> ) : ( <Navigate to="/Login" />)}>
             {/* <Route path="/" element={<Layout />}> */}
             <Route index element={<Home />} />
             <Route path="/Upcoming" element={<UpcomingTrips />} />
             <Route path="/Past" element={<PastTrips />} />
+            <Route path="/Buddies" element={<Buddies />} />
             <Route path="/Profile" element={<Profile />} />
-            <Route
-              path="/SingleUpcomingTrip/:tripId"
-              element={<SingleUpcomingTrip />}
-            />
-            <Route
-              path="/SinglePastTrip/:tripId"
-              element={<SinglePastTrip />}
-            />
+            <Route path="/SingleUpcomingTrip/:tripId" element={<SingleUpcomingTrip />} />
+            <Route path="/SinglePastTrip/:tripId" element={<SinglePastTrip />} />
             <Route path="/CreateTrip" element={<CreateTrip />} />
           </Route>
 

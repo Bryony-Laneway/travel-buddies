@@ -60,7 +60,7 @@ export function Buddies() {
     allUsers.map(user => (
       <div key={user.id} className="text-center mx-2">
         <img
-          src={`http://localhost:3333/uploads/profile-pics/${user.profile_pic}`}
+          src={`http://localhost:3333/uploads/profile-pics/${user.profile_pic || 'blank-avatar.jpg'}`}
           alt={`${user.name} ${user.surname}`}
           className="buddies-profile-pic mb-1"
         />

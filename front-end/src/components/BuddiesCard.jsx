@@ -11,7 +11,7 @@ export function BuddiesCard({ buddies }) {
           buddies.map(buddy => (
             <div key={buddy.id} className="text-center mx-2">
               <img
-                src={`http://localhost:3333/uploads/profile-pics/${buddy.profile_pic}`}
+                src={`http://localhost:3333/uploads/profile-pics/${buddy.profile_pic || 'blank-avatar.jpg'}`}
                 alt={`${buddy.name} ${buddy.surname}`}
                 className="buddies-profile-pic mb-1"
               />

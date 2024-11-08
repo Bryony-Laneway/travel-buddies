@@ -101,8 +101,6 @@ function Profile() {
       setTimeout(() => {
         navigate("/"); // Use navigate to go back to home
       }, 2000); // Delay of 2 seconds for the success message
-
-      console.log("Profile updated successfully");
     } catch (error) {
       console.error("Failed to update profile:", error);
     }

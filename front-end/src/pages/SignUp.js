@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -8,6 +9,7 @@ export default function SignUp() {
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const navigate = useNavigate();
 
   const checkPassword = () => {
     setError(null);
@@ -51,6 +53,11 @@ export default function SignUp() {
       const data = await response.json();
       if (response.ok) {
         setSuccessMessage("Registration successful! Your user ID is " + data.userId);
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        
       } else {
         setError(data.message || "Registration failed.");
       }

@@ -10,27 +10,6 @@ export async function getPastTrips() {
   }
 }
 
-// Add new trip
-export async function addNewTrip(tripData) {
-  console.log("from api file: " + tripData);
-  console.log(JSON.stringify(tripData));
-  try {
-    const response = await fetch(`http://localhost:3333/trips`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(tripData),
-    });
-
-    if (!response.ok) throw new Error("Failed to create trip");
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating trip:", error);
-    throw error;
-  }
-}
-
 // Get a single trip by ID
 export async function getSinglePastTrip(id) {
   try {
@@ -110,6 +89,25 @@ export async function addFriend(userId, friendId) {
 
   if (!response.ok) throw new Error('Error adding friend');
   return response.json();
+}
+
+// Add a trip
+export async function addTrip(tripData) {
+  try {
+    const response = await fetch(`http://localhost:3333/trips`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tripData),
+    });
+
+    if (!response.ok) throw new Error("Failed to create trip");
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating trip:", error);
+    throw error;
+  }
 }
 
 // Delete a friend by userID and friendID

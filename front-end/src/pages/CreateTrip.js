@@ -1,137 +1,166 @@
-import { useState } from "react";
-import { addNewTrip } from "../services/api";
+import { useState, useEffect } from "react";
+import { addTrip, getFriends } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
-const CreateTrip = (props) => {
-  //   const [startDate, setStartDate] = useState(new Date());
+const CreateTrip = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  //   const [items, setItems] = useState([]);
-  //   const [inputText, setInputText] = useState("");
+  const [friends, setFriends] = useState([]);
   const [tripData, setTripData] = useState({
-    host_id: "1",
-    co_host_id: "2",
+    host_id: "", 
+    co_host_id: "",
     trip_name: "",
-    start_date: "08/11/2024",
-    end_date: "12/11/2024",
+    start_date: "",
+    end_date: "",
     itinerary: "",
     notes: "",
   });
 
+  // Initialize useNavigate
+  const navigate = useNavigate();
+
+  // Get the logged-in user's ID from localStorage
+  const loggedInUserId = JSON.parse(localStorage.getItem('user'))?.id;
+
+  useEffect(() => {
+    if (loggedInUserId) {
+      // Populate host_id with logged-in user's ID
+      setTripData((prevData) => ({
+        ...prevData,
+        host_id: loggedInUserId,
+      }));
+
+      async function fetchFriends() {
+        try {
+          const friendsList = await getFriends(loggedInUserId);
+          setFriends(friendsList);
+        } catch (error) {
+          setError("Failed to load friends.");
+        }
+      }
+
+      fetchFriends();
+    } else {
+      setError("User not logged in.");
+    }
+  }, [loggedInUserId]);
+
   function handleChange(event) {
-    // const data = event.target.value;
-    // setTripData(data);
     const { name, value } = event.target;
     setTripData((prevData) => ({ ...prevData, [name]: value }));
   }
-  //   function addItem(inputText) {
-  //     setItems((prevItems) => {
-  //       return [...prevItems, inputText];
-  //     });
-  //   }
-  //   function addBuddy() {}
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
 
     try {
-      await addNewTrip(tripData);
+      await addTrip(tripData);
       setSuccessMessage("Trip created!");
-      //setFavPlaces([...favPlaces, { name }]); // Update fav places with new entry
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     } catch (err) {
-      setError("Failed to add place.");
+      setError("Failed to add trip.");
     }
   };
+
   return (
-    <div>
-      <h3 className="mb-5 w-100">Create New Trip</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="row mb-3">
+    <div className="container d-flex flex-column align-items-center">
+      <h3 className="mb-5 text-center">Create New Trip</h3>
+      {error && <p className="text-danger">{error}</p>}
+      {successMessage && <p className="text-success">{successMessage}</p>}
+
+      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: "500px" }}>
+        <div className="mb-3">
           <input
             type="text"
             placeholder="Trip Name"
             name="trip_name"
-            className="login-input w-80"
+            value={tripData.trip_name}
+            className="form-control form-control-lg"
             onChange={handleChange}
-          ></input>
+          />
         </div>
-        <div className="row mb-3">
+        
+        <div className="mb-3 row">
+          {/* Host input */}
           <input
             type="text"
             placeholder="Host"
-            name="trip_host"
-            className="login-input w-50"
-          ></input>
-          <input
-            type="text"
-            placeholder="Co-Host"
-            name="trip_co_host"
-            className="login-input w-50"
-          ></input>
+            name="host_id"
+            value={tripData.host_id}
+            className="form-control form-control-lg col"
+            readOnly
+          />
+          
+          {/* Co-host dropdown */}
+          <select
+            name="co_host_id"
+            className="form-control form-control-lg col"
+            onChange={handleChange}
+            value={tripData.co_host_id}
+          >
+            <option value="">Select Co-Host</option>
+            {friends.map((friend) => (
+              <option key={friend.id} value={friend.id}>
+                {friend.name}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="row mb-3">
-          {/* start date, end date */}
 
-          {/* <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        /> */}
+        {/* Start date input */}
+        <div className="mb-3">
+          <input
+            type="date"
+            placeholder="Start Date"
+            name="start_date"
+            value={tripData.start_date}
+            className="form-control form-control-lg"
+            onChange={handleChange}
+          />
         </div>
-        <div className="row mb-3">
+
+        {/* End date input */}
+        <div className="mb-3">
+          <input
+            type="date"
+            placeholder="End Date"
+            name="end_date"
+            value={tripData.end_date}
+            className="form-control form-control-lg"
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Itinerary textarea */}
+        <div className="mb-3">
           <textarea
-            type="text"
             placeholder="Itinerary"
             name="itinerary"
-            className="login-input"
+            value={tripData.itinerary}
+            className="form-control form-control-lg"
             onChange={handleChange}
           ></textarea>
         </div>
-        {/* <div className="row mb-3">
-          <input
-            type="text"
-            placeholder="Key Place"
-            name="trip_key_place"
-            className="login-input"
-          ></input>
-        </div> */}
-        <div className="row mb-3">
+
+        {/* Notes textarea */}
+        <div className="mb-3">
           <textarea
-            type="text"
             placeholder="Trip Notes"
             name="notes"
-            className="login-input w-50"
+            value={tripData.notes}
+            className="form-control form-control-lg"
             onChange={handleChange}
           ></textarea>
-          {/* <textarea
-            type="text"
-            placeholder="Packing List"
-            name="trip_packing_list"
-            className="login-input w-50"
-          ></textarea> */}
         </div>
-        <div className="row mb-3">
-          <input
-            type="text"
-            placeholder="Buddies"
-            name="trip_buddies"
-            className="login-input"
-          ></input>
-          {/* <button onClick={addBuddy} className="btn btn-outline-warning">
-            Add
-          </button> */}
-        </div>
-        <div className="row mb-3">
-          <button
-            // onSubmit={(event) => {
-            //   props.onAdd(inputText);
-            //   event.preventDefault();
-            // }}
-            type="submit"
-            className="btn btn-outline-warning w-50 mx-auto"
-          >
-            Create
-          </button>
-        </div>
+
+        {/* Submit button */}
+        <button type="submit" className="btn btn-outline-warning w-100">
+          Create
+        </button>
       </form>
     </div>
   );

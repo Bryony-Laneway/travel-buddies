@@ -188,16 +188,16 @@ router.post("/", async (req, res) => {
     trip_name,
     start_date,
     end_date,
-    created_at,
-    updated_at,
     itinerary,
     notes,
   } = req.body;
-  console.log("request :" + req);
+
+  console.log("Request body:", req.body);
+
   try {
     const sql = `
-    INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes)
-    VALUES (?, ?, ?, NOW(), NOW(), NOW(), NOW(), ?, ?)`;
+      INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes)
+      VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
 
     const values = [
       host_id,
@@ -205,23 +205,22 @@ router.post("/", async (req, res) => {
       trip_name,
       start_date,
       end_date,
-      created_at,
-      updated_at,
       itinerary,
       notes,
     ];
 
-    db.query(query, values, (err, results) => {
+    db.query(sql, values, (err, results) => {
       if (err) {
         console.error("Error executing SQL:", err);
         return res.status(500).json({ error: "Database query failed" });
       }
-      res.status(201).json({ success: true, Id: results.insertId });
+      res.status(201).json({ success: true, id: results.insertId });
     });
   } catch (error) {
-    console.error("Error adding favourite place:", error);
+    console.error("Error adding trip:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+
 
 module.exports = router;

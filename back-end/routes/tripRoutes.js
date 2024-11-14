@@ -4,7 +4,7 @@ const multer = require("multer");
 const router = express.Router();
 const db = require("../config/db");
 
-// Set up multer for trip photos uploads
+// Set up multer for trip photos uploads ***
 const tripPhotoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../uploads/trip-photos"));
@@ -76,26 +76,28 @@ router.get("/:id", (req, res) => {
 
 // Get all trips by userID
 router.get("/user/:user_id", (req, res) => {
-  const { user_id } = req.params; // Extract host_id from URL parameters
+  const { user_id } = req.params;
   const sql = `
-    SELECT 
-      t.id, t.host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
-      u1.name AS host_name
+    SELECT DISTINCT
+        t.id, t.host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
+        CONCAT(u.name, ' ', u.surname) AS host_name
     FROM 
-      trips t
+        trips t
+    JOIN 
+        users u ON t.host_id = u.id
     LEFT JOIN 
-      users u1 ON t.host_id = u1.id
+        trip_friends tf ON tf.trip_id = t.id
     WHERE 
-      t.host_id = ?;
+        t.host_id = ? OR tf.user_id = ?;
     `;
 
-  db.query(sql, [user_id], (err, results) => {
+  db.query(sql, [user_id, user_id], (err, results) => {
     if (err) {
       console.error("Error executing SQL:", err);
       return res.status(500).json({ error: "Database query failed" });
     }
     if (results.length === 0) {
-      return res.status(404).json({ message: "No trips found for this host" });
+      return res.status(404).json({ message: "No trips found for this user" });
     }
     res.json(results);
   });
@@ -287,26 +289,6 @@ router.post("/packing-list", (req, res) => {
       return res.status(500).json({ error: "Failed to add packing item to trip" });
     }
     res.status(201).json({ message: "Packing item added to trip", id: results.insertId });
-  });
-});
-
-// Add photo to trip
-router.post("/:id/photos", uploadTripPhoto.single("photo"), (req, res) => {
-  console.log("Request Body:", req.body); // Log the entire body
-  const { id } = req.params;
-  const userId = req.body.user_id;
-  const photoUrl = req.file ? req.file.filename : null;
-
-  const sql = `
-    INSERT INTO photos (trip_id, user_id, photo_url, publish)
-    VALUES (?, ?, ?, false)`;
-
-  db.query(sql, [id, userId, photoUrl], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to upload photo" });
-    }
-    res.status(201).json({ message: "Photo uploaded successfully", photoUrl });
   });
 });
 

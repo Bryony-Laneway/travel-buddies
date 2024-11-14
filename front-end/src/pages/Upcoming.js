@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import UpcomingCard from "../components/UpcomingCard";
-import { getPastTrips } from "../services/api"; // Import the API function
+import { getUpcomingTripsByUser } from "../services/api"; // Import the API function
 import { Link } from "react-router-dom";
 
 function UpcomingTrips() {
@@ -10,8 +10,9 @@ function UpcomingTrips() {
 
   useEffect(() => {
     const fetchTrips = async () => {
+      const userId = JSON.parse(localStorage.getItem('user')).id;
       try {
-        const data = await getPastTrips(); // Call the API function
+        const data = await getUpcomingTripsByUser(userId);
         setUpcomingTrips(data);
       } catch (err) {
         setError(err.message);
@@ -45,7 +46,8 @@ function UpcomingTrips() {
               tripId={trip.id}
               name={trip.trip_name}
               host={trip.host_name}
-              date={trip.start_date}
+              start_date={trip.start_date}
+              end_date={trip.end_date}
             />
           ))}
         </div>

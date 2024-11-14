@@ -1,34 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getSingleUpcomingTrip, getTripFriends, addFriendToTrip, removeFriendFromTrip, getFriends, getKeyPlaces, addKeyPlace, getPackingList, addPackingItem } from "../services/api";
+import { 
+  getTrip, getTripFriends, addFriendToTrip, removeFriendFromTrip, 
+  getFriends, getKeyPlaces, addKeyPlace, getPackingList, addPackingItem 
+} from "../services/api";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", { day: 'numeric', month: 'short', year: 'numeric' });
+};
 
 const SingleUpcomingTrip = () => {
   const { tripId } = useParams();
   const [tripData, setTripData] = useState(null);
-  const [friends, setFriends] = useState([]); // List of all friends
-  const [tripFriends, setTripFriends] = useState([]); // Friends in the trip
+  const [friends, setFriends] = useState([]);
+  const [tripFriends, setTripFriends] = useState([]);
   const [keyPlaces, setKeyPlaces] = useState([]);
   const [packingList, setPackingList] = useState([]);
   const [newKeyPlace, setNewKeyPlace] = useState("");
   const [newPackingItem, setNewPackingItem] = useState("");
   const [feedback, setFeedback] = useState({ error: null, success: null });
-  const userId = 1; // Set this to the actual user ID
+  const userId = JSON.parse(localStorage.getItem('user')).id;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const trip = await getSingleUpcomingTrip(tripId);
+        const trip = await getTrip(tripId);
         setTripData(trip);
 
-        // Fetch trip friends
         const tripFriendsList = await getTripFriends(tripId);
         setTripFriends(tripFriendsList.map(friend => friend.id));
 
-        // Fetch key places
         const keyPlacesList = await getKeyPlaces(tripId);
         setKeyPlaces(keyPlacesList);
 
-        // Fetch packing list items
         const packingItems = await getPackingList(tripId);
         setPackingList(packingItems);
 
@@ -61,10 +66,7 @@ const SingleUpcomingTrip = () => {
   const handleAddKeyPlace = async () => {
     if (!newKeyPlace) return;
     try {
-      // Add the new key place
       await addKeyPlace(tripId, userId, newKeyPlace);
-      
-      // Refetch the updated key places
       const keyPlacesList = await getKeyPlaces(tripId);
       setKeyPlaces(keyPlacesList);
       
@@ -78,10 +80,7 @@ const SingleUpcomingTrip = () => {
   const handleAddPackingItem = async () => {
     if (!newPackingItem) return;
     try {
-      // Add the new packing item
       await addPackingItem(tripId, newPackingItem);
-      
-      // Refetch the updated packing list
       const packingItems = await getPackingList(tripId);
       setPackingList(packingItems);
       
@@ -96,10 +95,13 @@ const SingleUpcomingTrip = () => {
 
   return (
     <div className="container col-10 mx-auto single">
-      <h3>{tripData.trip_name}</h3>
-      <p><strong>Start Date:</strong> {tripData.start_date}</p>
-      <p><strong>End Date:</strong> {tripData.end_date}</p>
-      <p><strong>Hosted by:</strong> {tripData.host_name}</p>
+      <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
+
+      <p className="text-center"><strong>Hosted by:</strong> {tripData.host_name}</p>
+      <div className="d-flex justify-content-between">
+        <p><strong>Start Date:</strong> {formatDate(tripData.start_date)}</p>
+        <p><strong>End Date:</strong> {formatDate(tripData.end_date)}</p>
+      </div>
 
       <h5>Itinerary</h5>
       <p>{tripData.itinerary}</p>
@@ -108,9 +110,9 @@ const SingleUpcomingTrip = () => {
       <p>{tripData.notes}</p>
 
       <h5>Friends</h5>
-      <ul>
+      <div>
         {friends.map((friend) => (
-          <li key={friend.id}>
+          <div key={friend.id} className="mb-2">
             {friend.name} 
             <button 
               onClick={() => toggleFriendInTrip(friend)} 
@@ -118,14 +120,14 @@ const SingleUpcomingTrip = () => {
             >
               {tripFriends.includes(friend.id) ? "Remove from Trip" : "Add to Trip"}
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <h5>Key Places</h5>
-      <ul>
-        {keyPlaces.map((place, i) => <li key={i}>{place.name}</li>)} {/* Render place.name */}
-      </ul>
+      <div>
+        {keyPlaces.map((place, i) => <div key={i}>{place.name}</div>)}
+      </div>
       <input
         type="text"
         value={newKeyPlace}
@@ -135,9 +137,9 @@ const SingleUpcomingTrip = () => {
       <button onClick={handleAddKeyPlace} className="btn btn-outline-warning">Add Key Place</button>
 
       <h5>Packing List</h5>
-      <ul>
-        {packingList.map((item) => <li key={item.id}>{item.item}</li>)}
-      </ul>
+      <div>
+        {packingList.map((item) => <div key={item.id}>{item.item}</div>)}
+      </div>
       <input
         type="text"
         value={newPackingItem}

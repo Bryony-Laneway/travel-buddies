@@ -1,126 +1,168 @@
+// import { useParams } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { getTrip, getTripFriends, getFriends, getKeyPlaces, getPackingList } from "../services/api";
+
+// const SinglePastTrip = () => {
+//   const { tripId } = useParams();
+//   const [tripData, setTripData] = useState(null);
+//   const [friends, setFriends] = useState([]); // List of all friends
+//   const [tripFriends, setTripFriends] = useState([]); // Friends in the trip
+//   const [keyPlaces, setKeyPlaces] = useState([]);
+//   const [packingList, setPackingList] = useState([]);
+//   const [feedback, setFeedback] = useState({ error: null, success: null });
+//   const userId = JSON.parse(localStorage.getItem('user')).id;
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const trip = await getTrip(tripId);
+//         setTripData(trip);
+
+//         // Fetch trip friends
+//         const tripFriendsList = await getTripFriends(tripId);
+//         setTripFriends(tripFriendsList.map(friend => friend.id));
+
+//         // Fetch key places
+//         const keyPlacesList = await getKeyPlaces(tripId);
+//         setKeyPlaces(keyPlacesList);
+
+//         // Fetch packing list items
+//         const packingItems = await getPackingList(tripId);
+//         setPackingList(packingItems);
+
+//         const allFriends = await getFriends(userId);
+//         setFriends(allFriends);
+        
+//       } catch {
+//         setFeedback({ error: "Failed to load trip data." });
+//       }
+//     };
+//     fetchData();
+//   }, [tripId]);
+
+//   if (!tripData) return <p>Loading...</p>;
+
+//   return (
+//     <div className="container col-10 mx-auto single">
+//       <h3>{tripData.trip_name}</h3>
+//       <p><strong>Start Date:</strong> {tripData.start_date}</p>
+//       <p><strong>End Date:</strong> {tripData.end_date}</p>
+//       <p><strong>Hosted by:</strong> {tripData.host_name}</p>
+      
+//       <h5>Itinerary</h5>
+//       <p>{tripData.itinerary}</p>
+
+//       <h5>Notes</h5>
+//       <p>{tripData.notes}</p>
+
+//       <h5>Friends</h5>
+//       <ul>
+//         {tripFriends.map((friendId) => {
+//           const friend = friends.find(f => f.id === friendId);
+//           return friend ? <li key={friend.id}>{friend.name}</li> : null;
+//         })}
+//       </ul>
+
+//       <h5>Key Places</h5>
+//       <ul>
+//         {keyPlaces.map((place, i) => <li key={i}>{place.name}</li>)}
+//       </ul>
+
+//       <h5>Packing List</h5>
+//       <ul>
+//         {packingList.map((item) => <li key={item.id}>{item.item}</li>)}
+//       </ul>
+
+//       {feedback.error && <div className="alert alert-danger">{feedback.error}</div>}
+//       {feedback.success && <div className="alert alert-success">{feedback.success}</div>}
+//     </div>
+//   );
+// };
+
+// export default SinglePastTrip;
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getSinglePastTrip } from "../services/api";
+import { getTrip, getTripFriends, getFriends, getKeyPlaces, getPackingList } from "../services/api";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", { day: 'numeric', month: 'short', year: 'numeric' });
+};
 
 const SinglePastTrip = () => {
   const { tripId } = useParams();
-  // console.log("Trip ID:", tripId); // Debugging
-
   const [tripData, setTripData] = useState(null);
-  const [favPlaces, setFavPlaces] = useState([]);
-  const [name, setName] = useState("");
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [file, setFile] = useState(null);
-  const [userId, setUserId] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-
-    if (storedUser) {
-      const { id } = JSON.parse(storedUser);
-      setUserId(id);
-    }
-  }, []);
+  const [friends, setFriends] = useState([]);
+  const [tripFriends, setTripFriends] = useState([]);
+  const [keyPlaces, setKeyPlaces] = useState([]);
+  const [packingList, setPackingList] = useState([]);
+  const [feedback, setFeedback] = useState({ error: null, success: null });
+  const userId = JSON.parse(localStorage.getItem('user')).id;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const trip = await getSinglePastTrip(tripId);
-        // const places = await getFavPlaces(tripId); // Pass ID if needed
+        const trip = await getTrip(tripId);
         setTripData(trip);
-        // setFavPlaces(places);
-      } catch (err) {
-        setError("Failed to load trip data.");
+
+        const tripFriendsList = await getTripFriends(tripId);
+        setTripFriends(tripFriendsList.map(friend => friend.id));
+
+        const keyPlacesList = await getKeyPlaces(tripId);
+        setKeyPlaces(keyPlacesList);
+
+        const packingItems = await getPackingList(tripId);
+        setPackingList(packingItems);
+
+        const allFriends = await getFriends(userId);
+        setFriends(allFriends);
+
+      } catch {
+        setFeedback({ error: "Failed to load trip data." });
       }
     };
-
     fetchData();
-  }, [tripId]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setSuccessMessage(null);
-
-    try {
-      await addFavPlace({ name, user_id: userId, trip_id: tripId });
-      setSuccessMessage("Place added!");
-      setFavPlaces([...favPlaces, { name }]); // Update fav places with new entry
-    } catch (err) {
-      setError("Failed to add place.");
-    }
-  };
-
-  const handleFileChange = (e) => setFile(e.target.files[0]);
-
-  const handleFileUpload = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      setError("Please select a file to upload.");
-      return;
-    }
-    // Implement file upload logic here if needed
-  };
+  }, [tripId, userId]);
 
   if (!tripData) return <p>Loading...</p>;
 
   return (
-    <div className="container">
-      <div className="content col-10 mx-auto single">
-        <div>
-          <h3 className="w-100">{tripData.trip_name}</h3>
-          <h6>
-            <strong>{tripData.start_date}</strong>
-          </h6>
-          <p className="italic">
-            <strong>Hosted By:</strong> {tripData.host_name},{" "}
-            <strong>Co-hosted by:</strong> {tripData.co_host_name}
-          </p>
-        </div>
-        <div>
-          <h5>Our Itinerary:</h5>
-          <p>{tripData.itinerary}</p>
-        </div>
-        <div>
-          <h5>The Buddies:</h5>
-          <p>List of friends who went.</p>
-        </div>
-        <div>
-          <h5>Trip Photos:</h5>
-          <form className="file-upload mb-3" onSubmit={handleFileUpload}>
-            <input type="file" onChange={handleFileChange} />
-            <button className="btn btn-outline-warning" type="submit">
-              Upload Photo
-            </button>
-          </form>
-        </div>
-        <div>
-          <h5>Our favourite places:</h5>
-          <div className="fav-places-list">
-            {favPlaces.map((place, index) => (
-              <p key={index}>{place.name}</p>
-            ))}
-          </div>
-          <form onSubmit={handleSubmit}>
-            <input
-              className="input"
-              type="text"
-              name="name"
-              placeholder="My favourite Place"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <button className="btn btn-outline-warning" type="submit">
-              Add
-            </button>
-          </form>
-          {error && <div className="alert alert-danger">{error}</div>}
-          {successMessage && (
-            <div className="alert alert-success">{successMessage}</div>
-          )}
-        </div>
+    <div className="container col-10 mx-auto single">
+      <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
+
+      <p className="text-center"><strong>Hosted by:</strong> {tripData.host_name}</p>
+      <div className="d-flex justify-content-between">
+        <p><strong>Start Date:</strong> {formatDate(tripData.start_date)}</p>
+        <p><strong>End Date:</strong> {formatDate(tripData.end_date)}</p>
       </div>
+
+      <h5>Itinerary</h5>
+      <p>{tripData.itinerary}</p>
+
+      <h5>Notes</h5>
+      <p>{tripData.notes}</p>
+
+      <h5>Friends</h5>
+      <div>
+        {tripFriends.map((friendId) => {
+          const friend = friends.find(f => f.id === friendId);
+          return friend ? <div key={friend.id}>{friend.name}</div> : null;
+        })}
+      </div>
+
+      <h5>Key Places</h5>
+      <div>
+        {keyPlaces.map((place, i) => <div key={i}>{place.name}</div>)}
+      </div>
+
+      <h5>Packing List</h5>
+      <div>
+        {packingList.map((item) => <div key={item.id}>{item.item}</div>)}
+      </div>
+
+      {feedback.error && <div className="alert alert-danger">{feedback.error}</div>}
+      {feedback.success && <div className="alert alert-success">{feedback.success}</div>}
     </div>
   );
 };

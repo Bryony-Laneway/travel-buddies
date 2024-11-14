@@ -36,11 +36,11 @@ const Layout = ({ onLogout, user }) => {
                     Past
                   </Link>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link className="nav-link" to="/Photos">
                     Photos
                   </Link>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/Buddies">
                     Buddies

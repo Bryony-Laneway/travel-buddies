@@ -51,7 +51,7 @@ export async function getUsers() {
 
 
 // TRIPS
-// Get all past trips
+// Get all past trips ***
 export async function getPastTrips() {
   try {
     const response = await fetch(`http://localhost:3333/trips`);
@@ -63,19 +63,7 @@ export async function getPastTrips() {
   }
 }
 
-// Get a past trip by Id
-export async function getSinglePastTrip(tripId) {
-  try {
-    const response = await fetch(`http://localhost:3333/trips/${tripId}`);
-    if (!response.ok) throw new Error(`Failed to fetch trip with ID: ${tripId}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching single past trip:", error);
-    throw error;
-  }
-}
-
-// Get all upcoming trips
+// Get all upcoming trips ***
 export async function getUpcomingTrips() {
   try {
     const response = await fetch(`http://localhost:3333/trips`);
@@ -87,8 +75,8 @@ export async function getUpcomingTrips() {
   }
 }
 
-// Get an upcoming trip by Id
-export async function getSingleUpcomingTrip(tripId) {
+// Get a trip by tripID
+export async function getTrip(tripId) {
   try {
     const response = await fetch(`http://localhost:3333/trips/${tripId}`);
     if (!response.ok) throw new Error(`Failed to fetch trip with ID: ${tripId}`);
@@ -96,6 +84,56 @@ export async function getSingleUpcomingTrip(tripId) {
   } catch (error) {
     console.error("Error fetching single past trip:", error);
     throw error;
+  }
+}
+
+// Get all past trips by userID
+export async function getPastTripsByUser(userId) {
+  try {
+    const response = await fetch(`http://localhost:3333/trips/user/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    
+    const trips = await response.json();
+
+    // Ensure trips is an array before filtering
+    if (!Array.isArray(trips)) {
+      throw new Error("Unexpected response format: not an array");
+    }
+
+    const currentDate = new Date();
+    const pastTrips = trips.filter(trip => new Date(trip.end_date) < currentDate);
+    return pastTrips;
+    
+  } catch (error) {
+    console.error("Error fetching past trips:", error);
+    throw error;
+  }
+}
+
+// Get all upcoming trips by userID
+export async function getUpcomingTripsByUser(userId) {
+  try {
+    const response = await fetch(`http://localhost:3333/trips/user/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    const trips = await response.json();
+
+    // Ensure trips is an array before filtering
+    if (!Array.isArray(trips)) {
+      throw new Error("Unexpected response format: not an array");
+    }
+
+    const currentDate = new Date();
+    const upcomingTrips = trips.filter(trip => new Date(trip.end_date) >= currentDate);
+    return upcomingTrips;
+    
+  } catch (error) {
+    console.error("Error fetching upcoming trips:", error);
+    throw new Error("Failed to retrieve upcoming trips");
   }
 }
 
@@ -146,7 +184,7 @@ export async function addFriendToTrip(tripId, userId) {
   }
 }
 
-// Remove a friend from a trip (assuming delete method)
+// Remove a friend from a trip
 export async function removeFriendFromTrip(tripId, userId) {
   try {
     const response = await fetch(`http://localhost:3333/trips/trip-friends`, {
@@ -202,7 +240,7 @@ export async function getPackingList(tripId) {
   }
 }
 
-// Add a packing item to a trip (assuming endpoint exists for adding items)
+// Add a packing item to a trip
 export async function addPackingItem(tripId, item) {
   try {
     const response = await fetch(`http://localhost:3333/trips/packing-list`, {
@@ -217,4 +255,5 @@ export async function addPackingItem(tripId, item) {
     throw error;
   }
 }
+
 

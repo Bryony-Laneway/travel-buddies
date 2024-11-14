@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PastCard from "../components/PastCard";
-import { getPastTrips } from "../services/api";
+import { getPastTripsByUser } from "../services/api";
 
 function PastTrips() {
   const [pastTrips, setPastTrips] = useState([]);
@@ -9,8 +9,9 @@ function PastTrips() {
 
   useEffect(() => {
     const fetchTrips = async () => {
+      const userId = JSON.parse(localStorage.getItem('user')).id;
       try {
-        const data = await getPastTrips();
+        const data = await getPastTripsByUser(userId);
         setPastTrips(data);
       } catch (err) {
         setError(err.message);
@@ -38,7 +39,8 @@ function PastTrips() {
               key={trip.id}
               tripId={trip.id}
               name={trip.trip_name}
-              date={trip.start_date}
+              start_date={trip.start_date}
+              end_date={trip.end_date}
               host={trip.host_name}
               img={trip.photo}
             />
@@ -50,3 +52,4 @@ function PastTrips() {
 }
 
 export default PastTrips;
+

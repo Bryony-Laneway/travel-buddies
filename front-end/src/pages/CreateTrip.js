@@ -1,49 +1,37 @@
 import { useState, useEffect } from "react";
-import { addTrip, getFriends } from "../services/api";
+import { addTrip } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 const CreateTrip = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [friends, setFriends] = useState([]);
   const [tripData, setTripData] = useState({
     host_id: "", 
-    co_host_id: "",
     trip_name: "",
     start_date: "",
     end_date: "",
     itinerary: "",
     notes: "",
   });
-
-  // Initialize useNavigate
+  const [hostEmail, setHostEmail] = useState("");
+  
   const navigate = useNavigate();
 
-  // Get the logged-in user's ID from localStorage
-  const loggedInUserId = JSON.parse(localStorage.getItem('user'))?.id;
-
   useEffect(() => {
-    if (loggedInUserId) {
-      // Populate host_id with logged-in user's ID
+    // Get the logged-in user data from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    // console.log("Logged-in user:", user);
+
+    if (user) {
       setTripData((prevData) => ({
         ...prevData,
-        host_id: loggedInUserId,
+        host_id: user.id,
       }));
-
-      async function fetchFriends() {
-        try {
-          const friendsList = await getFriends(loggedInUserId);
-          setFriends(friendsList);
-        } catch (error) {
-          setError("Failed to load friends.");
-        }
-      }
-
-      fetchFriends();
+      setHostEmail(user.email);
     } else {
       setError("User not logged in.");
     }
-  }, [loggedInUserId]);
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -85,46 +73,25 @@ const CreateTrip = () => {
         </div>
         
         <div className="mb-3 row">
-          {/* Host input */}
           <input
             type="text"
             placeholder="Host"
-            name="host_id"
-            value={tripData.host_id}
+            value={hostEmail}
             className="form-control form-control-lg col"
             readOnly
+            style={{ fontStyle: "italic", backgroundColor: "#f9f9f9" }}
           />
-          
-          {/* Co-host dropdown */}
-          <select
-            name="co_host_id"
-            className="form-control form-control-lg col"
-            onChange={handleChange}
-            value={tripData.co_host_id}
-          >
-            <option value="">Select Co-Host</option>
-            {friends.map((friend) => (
-              <option key={friend.id} value={friend.id}>
-                {friend.name}
-              </option>
-            ))}
-          </select>
         </div>
 
-        {/* Start date input */}
-        <div className="mb-3">
+        <div className="mb-3 d-flex">
           <input
             type="date"
             placeholder="Start Date"
             name="start_date"
             value={tripData.start_date}
-            className="form-control form-control-lg"
+            className="form-control form-control-lg me-2"
             onChange={handleChange}
           />
-        </div>
-
-        {/* End date input */}
-        <div className="mb-3">
           <input
             type="date"
             placeholder="End Date"
@@ -135,7 +102,6 @@ const CreateTrip = () => {
           />
         </div>
 
-        {/* Itinerary textarea */}
         <div className="mb-3">
           <textarea
             placeholder="Itinerary"
@@ -146,7 +112,6 @@ const CreateTrip = () => {
           ></textarea>
         </div>
 
-        {/* Notes textarea */}
         <div className="mb-3">
           <textarea
             placeholder="Trip Notes"
@@ -157,7 +122,6 @@ const CreateTrip = () => {
           ></textarea>
         </div>
 
-        {/* Submit button */}
         <button type="submit" className="btn btn-outline-warning w-100">
           Create
         </button>

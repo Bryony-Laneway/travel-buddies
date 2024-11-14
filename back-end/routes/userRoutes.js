@@ -22,37 +22,37 @@ const profilePicStorage = multer.diskStorage({
 
 const uploadProfilePic = multer({ storage: profilePicStorage });
 
-// Upload Profile Picture
-router.post('/:id/profile-picture', uploadProfilePic.single('profile_pic'), (req, res) => {
-  const userId = req.params.id;
-  const profilePic = req.file ? req.file.filename : null;
-  
-  // console.log(profilePic)
-  if (!profilePic) {
-    return res.status(400).json({ message: 'No profile picture uploaded' });
-  }
-
-  const query = `
-    UPDATE users
-    SET profile_pic = ?
-    WHERE id = ?
-  `;
-  const values = [profilePic, userId];
-
-  db.query(query, values, (error, results) => {
-    if (error) {
-      console.error('Error updating profile picture in database:', error);
-      return res.status(500).json({ message: 'Error updating profile picture', error });
+// Get all users (avoiding password_hash)
+router.get("/", (req, res) => {
+  const sql =
+    "SELECT id, name, surname, email, profile_pic, created_at FROM users";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
     }
-
-    res.json({ 
-      message: 'Profile picture updated successfully', 
-      profilePic: profilePic
-    });
+    res.json(results); // MySQL query results are directly available as 'results'
   });
 });
 
-// Update User by Id
+// Get user by Id (avoiding password_hash)
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT id, name, surname, email, profile_pic, created_at FROM users WHERE id = ?";
+  
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" }); // Handle case where no user is found
+    }
+    res.json(results[0]); // Return the first result as the specific user
+  });
+});
+
+// Update user by Id
 router.put("/:id", async (req, res) => {
   const userId = req.params.id;
   const { name, surname, email, newPassword } = req.body;
@@ -97,33 +97,33 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Get all users (avoiding password_hash)
-router.get("/", (req, res) => {
-  const sql =
-    "SELECT id, name, surname, email, profile_pic, created_at FROM users";
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Error executing SQL:", err);
-      return res.status(500).json({ error: "Database query failed" });
-    }
-    res.json(results); // MySQL query results are directly available as 'results'
-  });
-});
-
-// Get user by ID (avoiding password_hash)
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT id, name, surname, email, profile_pic, created_at FROM users WHERE id = ?";
+// Add profile picture
+router.post('/:id/profile-picture', uploadProfilePic.single('profile_pic'), (req, res) => {
+  const userId = req.params.id;
+  const profilePic = req.file ? req.file.filename : null;
   
-  db.query(sql, [id], (err, results) => {
-    if (err) {
-      console.error("Error executing SQL:", err);
-      return res.status(500).json({ error: "Database query failed" });
+  // console.log(profilePic)
+  if (!profilePic) {
+    return res.status(400).json({ message: 'No profile picture uploaded' });
+  }
+
+  const query = `
+    UPDATE users
+    SET profile_pic = ?
+    WHERE id = ?
+  `;
+  const values = [profilePic, userId];
+
+  db.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error updating profile picture in database:', error);
+      return res.status(500).json({ message: 'Error updating profile picture', error });
     }
-    if (results.length === 0) {
-      return res.status(404).json({ error: "User not found" }); // Handle case where no user is found
-    }
-    res.json(results[0]); // Return the first result as the specific user
+
+    res.json({ 
+      message: 'Profile picture updated successfully', 
+      profilePic: profilePic
+    });
   });
 });
 

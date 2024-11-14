@@ -28,7 +28,7 @@ function Profile() {
   const fetchUserData = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3333/users/${id}`);
-      console.log(JSON.stringify(response.data, null, 2));
+      // console.log(JSON.stringify(response.data, null, 2));
 
       // Transform profile_pic to profilePic
       const transformedData = {

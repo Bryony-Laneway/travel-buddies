@@ -11,7 +11,7 @@ const Layout = ({ onLogout, user }) => {
               rel="noopener noreferrer"
               to="/"
             >
-            <img src="./images/logo.png" alt="name" />
+              <img src="./images/logo.png" alt="name" />
             </Link>
             <button
               className="navbar-toggler"
@@ -100,7 +100,7 @@ const Layout = ({ onLogout, user }) => {
             data-bs-toggle="modal"
             data-bs-target="#privacyModal"
           >
-            Pivacy Policy
+            Privacy Policy
           </a>
         </div>
       </footer>
@@ -109,7 +109,7 @@ const Layout = ({ onLogout, user }) => {
       <div
         className="modal h-auto"
         id="contactModal"
-        tabindex="-1"
+        tabIndex="-1" // Changed tabindex to tabIndex
         aria-labelledby="contactModalLabel"
         aria-hidden="true"
       >
@@ -141,7 +141,7 @@ const Layout = ({ onLogout, user }) => {
       <div
         className="modal fade"
         id="privacyModal"
-        tabindex="-1"
+        tabIndex="-1" // Changed tabindex to tabIndex
         aria-labelledby="privacyModalLabel"
         aria-hidden="true"
       >

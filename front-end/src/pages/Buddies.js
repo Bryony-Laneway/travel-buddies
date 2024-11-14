@@ -17,7 +17,7 @@ export function Buddies() {
         // Fetch all users
         const users = await getUsers();
         setAllUsers(users.filter(user => user.id !== loggedInUserId)); // Exclude logged-in user
-        console.log('All Users:', users); 
+        // console.log('All Users:', users); 
       } catch (error) {
         console.error('Error loading data:', error);
       }

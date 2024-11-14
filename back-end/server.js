@@ -52,7 +52,7 @@ app.get("/", function (req, res) {
 app.use("/users", userRoutes);
 app.use("/trips", tripRoutes);
 app.use("/friends", friendRoutes);
-app.use("/places", tripRoutes);
+// app.use("/places", tripRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on : http://localhost:${PORT}`);

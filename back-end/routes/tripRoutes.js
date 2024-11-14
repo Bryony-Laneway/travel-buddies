@@ -27,39 +27,17 @@ const tripPhotoStorage = multer.diskStorage({
 
 const uploadTripPhoto = multer({ storage: tripPhotoStorage });
 
-// Post Photo to Trip
-router.post("/:id/photos", uploadTripPhoto.single("photo"), (req, res) => {
-  console.log("Request Body:", req.body); // Log the entire body
-  const { id } = req.params;
-  const userId = req.body.user_id;
-  const photoUrl = req.file ? req.file.filename : null;
-
-  const sql = `
-    INSERT INTO photos (trip_id, user_id, photo_url, publish)
-    VALUES (?, ?, ?, false)`;
-
-  db.query(sql, [id, userId, photoUrl], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to upload photo" });
-    }
-    res.status(201).json({ message: "Photo uploaded successfully", photoUrl });
-  });
-});
-
 // Get all trips
 router.get("/", (req, res) => {
   // const sql = "SELECT * FROM trips";
   const sql = `
     SELECT 
-      t.id, t.host_id, t.co_host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
-      u1.name AS host_name, u2.name AS co_host_name
+      t.id, t.host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
+      u1.name AS host_name
     FROM 
-        trips t
+      trips t
     LEFT JOIN 
-        users u1 ON t.host_id = u1.id
-    LEFT JOIN 
-        users u2 ON t.co_host_id = u2.id
+      users u1 ON t.host_id = u1.id;
     `;
 
   db.query(sql, (err, results) => {
@@ -71,47 +49,16 @@ router.get("/", (req, res) => {
   });
 });
 
-// Get all trips by host_id
-router.get("/host/:host_id", (req, res) => {
-  const { host_id } = req.params; // Extract host_id from URL parameters
-  const sql = `
-    SELECT 
-      t.id, t.host_id, t.co_host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
-      u1.name AS host_name, u2.name AS co_host_name
-    FROM 
-      trips t
-    LEFT JOIN 
-      users u1 ON t.host_id = u1.id
-    LEFT JOIN 
-      users u2 ON t.co_host_id = u2.id
-    WHERE 
-      t.host_id = ?;
-    `;
-
-  db.query(sql, [host_id], (err, results) => {
-    if (err) {
-      console.error("Error executing SQL:", err);
-      return res.status(500).json({ error: "Database query failed" });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ message: "No trips found for this host" });
-    }
-    res.json(results); // Return the list of trips as JSON
-  });
-});
-
-// Get trip by ID
+// Get trip by Id
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   const sql = `
     SELECT 
       trips.id, trips.trip_name, trips.start_date, trips.end_date, trips.created_at, 
       trips.updated_at, trips.itinerary, trips.notes,
-      host.id as host_id, host.name as host_name, host.email as host_email,
-      co_host.id as co_host_id, co_host.name as co_host_name, co_host.email as co_host_email
+      host.id as host_id, host.name as host_name, host.email as host_email
     FROM trips
     JOIN users as host ON trips.host_id = host.id
-    JOIN users as co_host ON trips.co_host_id = co_host.id
     WHERE trips.id = ?;
   `;
 
@@ -127,64 +74,37 @@ router.get("/:id", (req, res) => {
   });
 });
 
-//Bryony
-// Get favourite places by trip id
-router.get("/places/:trip_id", (req, res) => {
-  const { trip_id } = req.params; // Extract trip_id from URL parameters
+// Get all trips by userID
+router.get("/user/:user_id", (req, res) => {
+  const { user_id } = req.params; // Extract host_id from URL parameters
   const sql = `
     SELECT 
-      *
+      t.id, t.host_id, t.trip_name, t.start_date, t.end_date, t.created_at, t.updated_at, t.itinerary, t.notes,
+      u1.name AS host_name
     FROM 
-      fav_places
-    
+      trips t
+    LEFT JOIN 
+      users u1 ON t.host_id = u1.id
     WHERE 
-      trip_id = ?;
+      t.host_id = ?;
     `;
 
-  db.query(sql, [trip_id], (err, results) => {
+  db.query(sql, [user_id], (err, results) => {
     if (err) {
       console.error("Error executing SQL:", err);
       return res.status(500).json({ error: "Database query failed" });
     }
     if (results.length === 0) {
-      return res.status(404).json({
-        message:
-          "No favourite places added. Be the first to add a favourite place!",
-      });
+      return res.status(404).json({ message: "No trips found for this host" });
     }
-    // res.send(results);
-    res.json(results); // Return the list of favourite places as JSON
+    res.json(results);
   });
 });
 
-//Bryony - add favourite place
-router.post("/places", async (req, res) => {
-  const { id, trip_id, user_id, name } = req.body;
-
-  try {
-    const query =
-      "INSERT INTO fav_places (id, trip_id, user_id, name, created_at) VALUES (?, ?, ?, ?, NOW())";
-    const values = [id, trip_id, user_id, name];
-
-    db.query(query, values, (err, results) => {
-      if (err) {
-        console.error("Error executing SQL:", err);
-        return res.status(500).json({ error: "Failed to add place" });
-      }
-
-      res.status(201).json({ success: true, Id: results.insertId });
-    });
-  } catch (error) {
-    console.error("Error adding favourite place:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-});
-
-// Create New Trip
+// Create a trip
 router.post("/", async (req, res) => {
   const {
     host_id,
-    co_host_id,
     trip_name,
     start_date,
     end_date,
@@ -192,16 +112,15 @@ router.post("/", async (req, res) => {
     notes,
   } = req.body;
 
-  console.log("Request body:", req.body);
+  // console.log("Request body:", req.body);
 
   try {
     const sql = `
-      INSERT INTO trips (host_id, co_host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes)
-      VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
+      INSERT INTO trips (host_id, trip_name, start_date, end_date, created_at, updated_at, itinerary, notes)
+      VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
 
     const values = [
       host_id,
-      co_host_id,
       trip_name,
       start_date,
       end_date,
@@ -222,5 +141,173 @@ router.post("/", async (req, res) => {
   }
 });
 
+// All friends by tripID
+router.get("/friends/:trip_id", (req, res) => {
+  const { trip_id } = req.params;
+  const sql = `
+    SELECT u.id, u.name
+    FROM trip_friends tf
+    JOIN users u ON tf.user_id = u.id
+    WHERE tf.trip_id = ?;
+  `;
+
+  db.query(sql, [trip_id], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+    res.json(results);
+  });
+});
+
+// Add a friend to trip
+router.post("/trip-friends", (req, res) => {
+  const { tripId, userId } = req.body;
+  
+  // Query to check if this friend already exists in the trip
+  const checkSql = "SELECT * FROM trip_friends WHERE trip_id = ? AND user_id = ?";
+  
+  db.query(checkSql, [tripId, userId], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database error occurred" });
+    }
+    
+    if (results.length > 0) {
+      // User is already a friend in this trip
+      return res.status(400).json({ error: "Friend already added to this trip" });
+    }
+
+    // Proceed to insert if not already in trip
+    const sql = "INSERT INTO trip_friends (trip_id, user_id) VALUES (?, ?)";
+    db.query(sql, [tripId, userId], (err, results) => {
+      if (err) {
+        console.error("Error executing SQL:", err);
+        return res.status(500).json({ error: "Failed to add friend to trip" });
+      }
+      res.status(201).json({ message: "Friend added to trip", id: results.insertId });
+    });
+  });
+});
+
+// Remove a friend from trip
+router.delete("/trip-friends", (req, res) => {
+  const { tripId, userId } = req.body;
+
+  // Query to check if the friend is already in the trip
+  const checkSql = "SELECT * FROM trip_friends WHERE trip_id = ? AND user_id = ?";
+  
+  db.query(checkSql, [tripId, userId], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database error occurred" });
+    }
+    
+    if (results.length === 0) {
+      // Friend is not in the trip, can't remove
+      return res.status(404).json({ error: "Friend not found in this trip" });
+    }
+
+    // Proceed to delete the friend from the trip
+    const deleteSql = "DELETE FROM trip_friends WHERE trip_id = ? AND user_id = ?";
+    db.query(deleteSql, [tripId, userId], (err, results) => {
+      if (err) {
+        console.error("Error executing SQL:", err);
+        return res.status(500).json({ error: "Failed to remove friend from trip" });
+      }
+      res.status(200).json({ message: "Friend removed from trip" });
+    });
+  });
+});
+
+// All key places by tripID
+router.get("/key-places/:trip_id", (req, res) => {
+  const { trip_id } = req.params;
+  const sql = `
+    SELECT kp.id, kp.name
+    FROM key_places kp
+    WHERE kp.trip_id = ?;
+  `;
+
+  db.query(sql, [trip_id], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+    res.json(results);
+  });
+});
+
+// Add key place to trip
+router.post("/key-places", (req, res) => {
+  const { tripId, userId, name } = req.body;
+  const sql = `
+    INSERT INTO key_places (trip_id, user_id, name )
+    VALUES (?, ?, ?);
+  `;
+
+  db.query(sql, [tripId, userId, name ], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Failed to add key place to trip" });
+    }
+    res.status(201).json({ message: "Key place added to trip", id: results.insertId });
+  });
+});
+
+// All packing items by tripID
+router.get("/packing-list/:trip_id", (req, res) => {
+  const { trip_id } = req.params;
+  const sql = `
+    SELECT id, item
+    FROM packing_list
+    WHERE trip_id = ?;
+  `;
+
+  db.query(sql, [trip_id], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+    res.json(results);
+  });
+});
+
+// Add packing item to trip
+router.post("/packing-list", (req, res) => {
+  const { tripId, item } = req.body;
+  const sql = `
+    INSERT INTO packing_list (trip_id, item)
+    VALUES (?, ?);
+  `;
+
+  db.query(sql, [tripId, item], (err, results) => {
+    if (err) {
+      console.error("Error executing SQL:", err);
+      return res.status(500).json({ error: "Failed to add packing item to trip" });
+    }
+    res.status(201).json({ message: "Packing item added to trip", id: results.insertId });
+  });
+});
+
+// Add photo to trip
+router.post("/:id/photos", uploadTripPhoto.single("photo"), (req, res) => {
+  console.log("Request Body:", req.body); // Log the entire body
+  const { id } = req.params;
+  const userId = req.body.user_id;
+  const photoUrl = req.file ? req.file.filename : null;
+
+  const sql = `
+    INSERT INTO photos (trip_id, user_id, photo_url, publish)
+    VALUES (?, ?, ?, false)`;
+
+  db.query(sql, [id, userId, photoUrl], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Failed to upload photo" });
+    }
+    res.status(201).json({ message: "Photo uploaded successfully", photoUrl });
+  });
+});
 
 module.exports = router;

@@ -1,14 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {
-  getSinglePastTrip,
-  getFavouritePlaces,
-  addFavouritePlace,
-} from "../services/api";
+import { getSinglePastTrip } from "../services/api";
 
 const SinglePastTrip = () => {
   const { tripId } = useParams();
-  console.log("Trip ID:", tripId); // Debugging
+  // console.log("Trip ID:", tripId); // Debugging
 
   const [tripData, setTripData] = useState(null);
   const [favPlaces, setFavPlaces] = useState([]);
@@ -31,9 +27,9 @@ const SinglePastTrip = () => {
     const fetchData = async () => {
       try {
         const trip = await getSinglePastTrip(tripId);
-        const places = await getFavouritePlaces(tripId); // Pass ID if needed
+        // const places = await getFavPlaces(tripId); // Pass ID if needed
         setTripData(trip);
-        setFavPlaces(places);
+        // setFavPlaces(places);
       } catch (err) {
         setError("Failed to load trip data.");
       }
@@ -48,7 +44,7 @@ const SinglePastTrip = () => {
     setSuccessMessage(null);
 
     try {
-      await addFavouritePlace({ name, user_id: userId, trip_id: tripId });
+      await addFavPlace({ name, user_id: userId, trip_id: tripId });
       setSuccessMessage("Place added!");
       setFavPlaces([...favPlaces, { name }]); // Update fav places with new entry
     } catch (err) {

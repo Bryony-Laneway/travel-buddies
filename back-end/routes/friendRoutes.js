@@ -45,6 +45,7 @@ router.post("/add", (req, res) => {
 
 // Delete a friend by userID and friendID
 router.delete("/delete", (req, res) => {
+  // console.log("DELETE request triggered");
   const { userId, friendId } = req.body;
 
   const sql = "DELETE FROM friends WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";

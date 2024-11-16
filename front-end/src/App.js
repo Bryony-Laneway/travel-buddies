@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import SingleUpcomingTrip from "./pages/SingleUpcomingTrip";
 import SinglePastTrip from "./pages/SinglePastTrip";
 import CreateTrip from "./pages/CreateTrip";
+import ChooseVibe from "./pages/ChooseVibe";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -61,6 +62,7 @@ export default function App() {
             <Route path="/Profile" element={<Profile />} />
             <Route path="/SingleUpcomingTrip/:tripId" element={<SingleUpcomingTrip />} />
             <Route path="/SinglePastTrip/:tripId" element={<SinglePastTrip />} />
+            <Route path="/ChooseVibe" element={<ChooseVibe />} />
             <Route path="/CreateTrip" element={<CreateTrip />} />
           </Route>
 

@@ -42,6 +42,11 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li> */}
                 <li className="nav-item">
+                  <Link className="nav-link" to="/ChooseVibe">
+                    ChooseVibe
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link className="nav-link" to="/Buddies">
                     Buddies
                   </Link>

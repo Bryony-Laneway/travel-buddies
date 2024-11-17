@@ -168,6 +168,19 @@ h5 {
   border-radius: 5px;
 }
 
+.hidden {
+  display: none;
+}
+
+.profile-pic {
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  border-radius: 90px;
+  margin: auto;
+  margin-top: 40px;
+}
+
 .single {
   /* border: 1px solid var(--orange-500); */
   border: 1px solid var(--green-600);
@@ -210,15 +223,20 @@ h5 {
   font-style: italic;
 }
 
-.card-img-top {
+/* .card-img-top {
   height: 250px;
   background-size: cover;
-}
+} */
 
 .buddies-profile-pic {
   height: 80px;
   width: 80px;
   border-radius: 90px;
+}
+
+.user-name {
+  width: auto;
+  text-align: center;
 }
 
 .footer-logo {
@@ -254,6 +272,10 @@ h5 {
 
 .btn-close {
   color: var(--green-600);
+}
+
+.fpmodal {
+  height: auto;
 }
 
 .balsamiq-sans-regular {

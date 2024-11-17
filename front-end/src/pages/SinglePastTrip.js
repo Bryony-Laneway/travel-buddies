@@ -32,7 +32,7 @@
 
 //         const allFriends = await getFriends(userId);
 //         setFriends(allFriends);
-        
+
 //       } catch {
 //         setFeedback({ error: "Failed to load trip data." });
 //       }
@@ -48,7 +48,7 @@
 //       <p><strong>Start Date:</strong> {tripData.start_date}</p>
 //       <p><strong>End Date:</strong> {tripData.end_date}</p>
 //       <p><strong>Hosted by:</strong> {tripData.host_name}</p>
-      
+
 //       <h5>Itinerary</h5>
 //       <p>{tripData.itinerary}</p>
 
@@ -83,11 +83,21 @@
 
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getTrip, getTripFriends, getFriends, getKeyPlaces, getPackingList } from "../services/api";
+import {
+  getTrip,
+  getTripFriends,
+  getFriends,
+  getKeyPlaces,
+  getPackingList,
+} from "../services/api";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", { day: 'numeric', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 const SinglePastTrip = () => {
@@ -96,9 +106,8 @@ const SinglePastTrip = () => {
   const [friends, setFriends] = useState([]);
   const [tripFriends, setTripFriends] = useState([]);
   const [keyPlaces, setKeyPlaces] = useState([]);
-  const [packingList, setPackingList] = useState([]);
   const [feedback, setFeedback] = useState({ error: null, success: null });
-  const userId = JSON.parse(localStorage.getItem('user')).id;
+  const userId = JSON.parse(localStorage.getItem("user")).id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,17 +116,13 @@ const SinglePastTrip = () => {
         setTripData(trip);
 
         const tripFriendsList = await getTripFriends(tripId);
-        setTripFriends(tripFriendsList.map(friend => friend.id));
+        setTripFriends(tripFriendsList.map((friend) => friend.id));
 
         const keyPlacesList = await getKeyPlaces(tripId);
         setKeyPlaces(keyPlacesList);
 
-        const packingItems = await getPackingList(tripId);
-        setPackingList(packingItems);
-
         const allFriends = await getFriends(userId);
         setFriends(allFriends);
-
       } catch {
         setFeedback({ error: "Failed to load trip data." });
       }
@@ -131,38 +136,45 @@ const SinglePastTrip = () => {
     <div className="container col-10 mx-auto single">
       <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
 
-      <p className="text-center"><strong>Hosted by:</strong> {tripData.host_name}</p>
-      <div className="d-flex justify-content-between">
-        <p><strong>Start Date:</strong> {formatDate(tripData.start_date)}</p>
-        <p><strong>End Date:</strong> {formatDate(tripData.end_date)}</p>
+      <p className="text-center">
+        <strong>Hosted by:</strong> {tripData.host_name}
+      </p>
+      <div className="">
+        <p>
+          <strong>Start Date:</strong> {formatDate(tripData.start_date)}
+        </p>
+        <p>
+          <strong>End Date:</strong> {formatDate(tripData.end_date)}
+        </p>
       </div>
 
-      <h5>Itinerary</h5>
+      <h5>Our Itinerary</h5>
       <p>{tripData.itinerary}</p>
 
-      <h5>Notes</h5>
+      <h5>Key Notes</h5>
       <p>{tripData.notes}</p>
 
-      <h5>Friends</h5>
+      <h5>Trip Buddies</h5>
       <div>
         {tripFriends.map((friendId) => {
-          const friend = friends.find(f => f.id === friendId);
+          const friend = friends.find((f) => f.id === friendId);
           return friend ? <div key={friend.id}>{friend.name}</div> : null;
         })}
       </div>
 
-      <h5>Key Places</h5>
+      <h5>Favourite Places</h5>
       <div>
-        {keyPlaces.map((place, i) => <div key={i}>{place.name}</div>)}
+        {keyPlaces.map((place, i) => (
+          <div key={i}>{place.name}</div>
+        ))}
       </div>
 
-      <h5>Packing List</h5>
-      <div>
-        {packingList.map((item) => <div key={item.id}>{item.item}</div>)}
-      </div>
-
-      {feedback.error && <div className="alert alert-danger">{feedback.error}</div>}
-      {feedback.success && <div className="alert alert-success">{feedback.success}</div>}
+      {feedback.error && (
+        <div className="alert alert-danger">{feedback.error}</div>
+      )}
+      {feedback.success && (
+        <div className="alert alert-success">{feedback.success}</div>
+      )}
     </div>
   );
 };

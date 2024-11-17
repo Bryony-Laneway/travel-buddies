@@ -6,7 +6,7 @@ const CreateTrip = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [tripData, setTripData] = useState({
-    host_id: "", 
+    host_id: "",
     trip_name: "",
     start_date: "",
     end_date: "",
@@ -14,7 +14,7 @@ const CreateTrip = () => {
     notes: "",
   });
   const [hostEmail, setHostEmail] = useState("");
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,41 +55,43 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center">
-      <h3 className="mb-5 text-center">Create New Trip</h3>
+    <div className="col-9 mx-auto">
+      <div className="row">
+        <h3 className="mb-5 text-center">Create New Trip</h3>
+      </div>
       {error && <p className="text-danger">{error}</p>}
       {successMessage && <p className="text-success">{successMessage}</p>}
 
-      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: "500px" }}>
-        <div className="mb-3">
+      <form onSubmit={handleSubmit} className="mx-auto">
+        <div className="mb-3 row">
           <input
             type="text"
             placeholder="Trip Name"
             name="trip_name"
             value={tripData.trip_name}
-            className="form-control form-control-lg"
+            className="form-control form-control-lg login-input"
             onChange={handleChange}
           />
         </div>
-        
+
         <div className="mb-3 row">
           <input
             type="text"
             placeholder="Host"
             value={hostEmail}
-            className="form-control form-control-lg col"
+            className="form-control form-control-lg col login-input"
             readOnly
-            style={{ fontStyle: "italic", backgroundColor: "#f9f9f9" }}
+            disabled
           />
         </div>
 
-        <div className="mb-3 d-flex">
+        <div className="mb-3 row">
           <input
             type="date"
             placeholder="Start Date"
             name="start_date"
             value={tripData.start_date}
-            className="form-control form-control-lg me-2"
+            className="form-control form-control-lg me-2 login-input col"
             onChange={handleChange}
           />
           <input
@@ -97,34 +99,39 @@ const CreateTrip = () => {
             placeholder="End Date"
             name="end_date"
             value={tripData.end_date}
-            className="form-control form-control-lg"
+            className="form-control form-control-lg login-input col"
             onChange={handleChange}
           />
         </div>
 
-        <div className="mb-3">
+        <div className="mb-3 row">
           <textarea
             placeholder="Itinerary"
             name="itinerary"
             value={tripData.itinerary}
-            className="form-control form-control-lg"
+            className="form-control form-control-lg login-input"
             onChange={handleChange}
           ></textarea>
         </div>
 
-        <div className="mb-3">
+        <div className="mb-3 row">
           <textarea
             placeholder="Trip Notes"
             name="notes"
             value={tripData.notes}
-            className="form-control form-control-lg"
+            className="form-control form-control-lg login-input"
             onChange={handleChange}
           ></textarea>
         </div>
 
-        <button type="submit" className="btn btn-outline-warning w-100">
-          Create
-        </button>
+        <div className="row  align-text-center">
+          <button
+            type="submit"
+            className="col-md-2 btn btn-outline-warning mx-auto"
+          >
+            Create
+          </button>
+        </div>
       </form>
     </div>
   );

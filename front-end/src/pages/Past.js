@@ -9,7 +9,7 @@ function PastTrips() {
 
   useEffect(() => {
     const fetchTrips = async () => {
-      const userId = JSON.parse(localStorage.getItem('user')).id;
+      const userId = JSON.parse(localStorage.getItem("user")).id;
       try {
         const data = await getPastTripsByUser(userId);
         setPastTrips(data);
@@ -29,7 +29,7 @@ function PastTrips() {
     <>
       <div className="row mb-5">
         <div className="col">
-          <h3 className="">Past Trips</h3>
+          <h3 className="mt-5">Past Trips</h3>
         </div>
       </div>
       <div className="past-trips-container">
@@ -52,4 +52,3 @@ function PastTrips() {
 }
 
 export default PastTrips;
-

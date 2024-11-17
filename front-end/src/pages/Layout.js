@@ -6,11 +6,7 @@ const Layout = ({ onLogout, user }) => {
       <div>
         <nav className="navbar navbar-expand-lg fixed-top bg-body-white">
           <div className="container-fluid">
-            <Link
-              className="home-link"
-              rel="noopener noreferrer"
-              to="/"
-            >
+            <Link className="home-link" rel="noopener noreferrer" to="/">
               <img src="./images/logo.png" alt="name" />
             </Link>
             <button
@@ -27,6 +23,11 @@ const Layout = ({ onLogout, user }) => {
             <div className="collapse navbar-collapse" id="navbarToggler">
               <ul className="navbar-nav mb-2 mb-lg-0">
                 <li className="nav-item">
+                  <Link className="nav-link" to="/ChooseVibe">
+                    Ideas
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link className="nav-link" to="/Upcoming">
                     Upcoming
                   </Link>
@@ -41,11 +42,7 @@ const Layout = ({ onLogout, user }) => {
                     Photos
                   </Link>
                 </li> */}
-                <li className="nav-item">
-                  <Link className="nav-link" to="/ChooseVibe">
-                    ChooseVibe
-                  </Link>
-                </li>
+
                 <li className="nav-item">
                   <Link className="nav-link" to="/Buddies">
                     Buddies
@@ -69,7 +66,10 @@ const Layout = ({ onLogout, user }) => {
                   </Link>
                 </li>
                 <li>
-                  <button onClick={onLogout} className="btn btn-outline-warning mt-2">
+                  <button
+                    onClick={onLogout}
+                    className="btn btn-outline-warning mt-2"
+                  >
                     Logout
                   </button>
                 </li>
@@ -163,7 +163,54 @@ const Layout = ({ onLogout, user }) => {
                 aria-label="close"
               ></button>
             </div>
-            <div className="modal-body"></div>
+            <div className="modal-body">
+              <p>
+                Travel Buddies is committed to providing quality services to you
+                and this policy outlines our ongoing obligations to you in
+                respect of how we manage your Personal Information. We have
+                adopted the Australian Privacy Principles (APPs) contained in
+                the Privacy Act 1988 (Cth) (the Privacy Act). The NPPs govern
+                the way in which we collect, use, disclose, store, secure and
+                dispose of your Personal Information. A copy of the Australian
+                Privacy Principles may be obtained from the website of The
+                Office of the Australian Information Commissioner at
+                https://www.oaic.gov.au/.
+              </p>
+
+              <p>
+                Personal Information is obtained in many ways including your
+                profile information, trip details and photos added.
+              </p>
+
+              <p>
+                Where reasonable and practicable to do so, we will collect your
+                Personal Information only from you. However, in some
+                circumstances we may be provided with information by third
+                parties. In such a case we will take reasonable steps to ensure
+                that you are made aware of the information provided to us by the
+                third party.
+              </p>
+
+              <p>
+                Your Personal Information may be disclosed in a number of
+                circumstances including the following: • Third parties where you
+                consent to the use or disclosure; and • Where required or
+                authorised by law.
+              </p>
+
+              <p>
+                Your Personal Information is stored in a manner that reasonably
+                protects it from misuse and loss and from unauthorized access,
+                modification or disclosure. Most Personal Information is or will
+                be stored in client files which will be kept by us for a minimum
+                of 7 years.
+              </p>
+
+              <p className="mb-5">
+                If you have any queries or complaints please contact us at:
+                Travel Buddies travelbuddies@outlook.com 0432 123 456
+              </p>
+            </div>
           </div>
         </div>
       </div>

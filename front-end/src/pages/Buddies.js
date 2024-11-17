@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { getFriends, getUsers, addFriend, deleteFriend } from '../services/api';
-import BuddiesCard from '../components/BuddiesCard';
+import React, { useEffect, useState } from "react";
+import { getFriends, getUsers, addFriend, deleteFriend } from "../services/api";
+import BuddiesCard from "../components/BuddiesCard";
 
 export function Buddies() {
   const [allUsers, setAllUsers] = useState([]);
   const [buddies, setBuddies] = useState([]);
-  const loggedInUserId = JSON.parse(localStorage.getItem('user')).id;
+  const loggedInUserId = JSON.parse(localStorage.getItem("user")).id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,13 +13,13 @@ export function Buddies() {
         // Fetch the user's friends
         const friends = await getFriends(loggedInUserId);
         setBuddies(friends);
-        
+
         // Fetch all users
         const users = await getUsers();
-        setAllUsers(users.filter(user => user.id !== loggedInUserId)); // Exclude logged-in user
-        // console.log('All Users:', users); 
+        setAllUsers(users.filter((user) => user.id !== loggedInUserId)); // Exclude logged-in user
+        // console.log('All Users:', users);
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error("Error loading data:", error);
       }
     };
     fetchData();
@@ -32,7 +32,7 @@ export function Buddies() {
       const updatedFriends = await getFriends(loggedInUserId);
       setBuddies(updatedFriends);
     } catch (error) {
-      console.error('Error adding friend:', error);
+      console.error("Error adding friend:", error);
     }
   };
 
@@ -43,50 +43,56 @@ export function Buddies() {
       const updatedFriends = await getFriends(loggedInUserId);
       setBuddies(updatedFriends);
     } catch (error) {
-      console.error('Error removing friend:', error);
+      console.error("Error removing friend:", error);
     }
   };
 
   return (
     <div>
-        <BuddiesCard buddies={buddies} />
+      <BuddiesCard buddies={buddies} />
 
       {/* All Users */}
       <div className="row mb-3">
         <h3 className="col-10 mt-3">Users</h3>
       </div>
-      <div className="buddies-section mb-5 d-flex flex-wrap">
-  {allUsers.length > 0 ? (
-    allUsers.map(user => (
-      <div key={user.id} className="text-center mx-2">
-        <img
-          src={`http://localhost:3333/uploads/profile-pics/${user.profile_pic || 'blank-avatar.jpg'}`}
-          alt={`${user.name} ${user.surname}`}
-          className="buddies-profile-pic mb-1"
-        />
-        <span className="d-block">{user.name} {user.surname}</span>
-        {buddies.some(buddy => buddy.id === user.id) ? (
-          <button
-            className="btn btn-outline-danger btn-sm mt-2"
-            onClick={() => handleRemoveFriend(user.id)}
-          >
-            Remove Friend
-          </button>
+      <div className="buddies-section row">
+        {allUsers.length > 0 ? (
+          allUsers.map((user) => (
+            <div
+              key={user.id}
+              className="text-center col-xs-10 col-sm-6 col-md-6 col-lg-3 col-xl-2 mb-4"
+            >
+              <img
+                src={`http://localhost:3333/uploads/profile-pics/${
+                  user.profile_pic || "blank-avatar.jpg"
+                }`}
+                alt={`${user.name} ${user.surname}`}
+                className="buddies-profile-pic mb-1"
+              />
+              <p className="user-name">
+                {user.name} {user.surname}
+              </p>
+              {buddies.some((buddy) => buddy.id === user.id) ? (
+                <button
+                  className="btn btn-outline-success btn-sm mt-2"
+                  onClick={() => handleRemoveFriend(user.id)}
+                >
+                  Remove Friend
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline-warning btn-sm mt-2"
+                  onClick={() => handleAddFriend(user.id)}
+                >
+                  Add Friend
+                </button>
+              )}
+            </div>
+          ))
         ) : (
-          <button
-            className="btn btn-outline-primary btn-sm mt-2"
-            onClick={() => handleAddFriend(user.id)}
-          >
-            Add Friend
-          </button>
+          <p>No users available.</p>
         )}
       </div>
-    ))
-  ) : (
-    <p>No users available.</p>
-  )}
-</div>
-
     </div>
   );
 }

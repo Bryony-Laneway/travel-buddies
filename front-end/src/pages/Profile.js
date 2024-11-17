@@ -10,7 +10,7 @@ function Profile() {
     email: "",
     profilePic: "",
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [displayedName, setDisplayedName] = useState("");
@@ -35,14 +35,13 @@ function Profile() {
         ...response.data,
         profilePic: response.data.profile_pic,
       };
-      
+
       setUser((prevUser) => ({
         ...prevUser,
-        ...transformedData
+        ...transformedData,
       }));
 
       setDisplayedName(transformedData.name);
-
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     }
@@ -50,10 +49,10 @@ function Profile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("E Target - Handle Change: " + e.target)
+    console.log("E Target - Handle Change: " + e.target);
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -63,14 +62,18 @@ function Profile() {
       const formData = new FormData();
       formData.append("profile_pic", file);
       try {
-        const response = await axios.post(`http://localhost:3333/users/${user.id}/profile-picture`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        const response = await axios.post(
+          `http://localhost:3333/users/${user.id}/profile-picture`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
-        });
+        );
         setUser((prevUser) => ({
           ...prevUser,
-          profilePic: response.data.profilePic
+          profilePic: response.data.profilePic,
         }));
         console.log("Profile picture updated successfully");
       } catch (error) {
@@ -91,9 +94,9 @@ function Profile() {
         name: user.name,
         surname: user.surname,
         email: user.email,
-        newPassword: user.newPassword
+        newPassword: user.newPassword,
       });
-      
+
       setDisplayedName(user.name);
       setSuccessMessage("Profile updated successfully!");
 
@@ -107,105 +110,101 @@ function Profile() {
   };
 
   return (
-    <div className="container" style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh"
-    }}>
-      <div className="Profile">
-        <h1 className="mt-5">Hello {displayedName}</h1>
+    <div className="Profile">
+      <h3 className="mt-5 w-100">Hello {displayedName}</h3>
 
-        {successMessage && (
-          <div style={{
-            backgroundColor: "lightgreen",
-            color: "green",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "15px"
-          }}>
-            {successMessage}
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit} style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          maxWidth: "300px",
-          width: "100%"
-        }}>
+      {successMessage && <div className="alert-success">{successMessage}</div>}
+
+      <form onSubmit={handleSubmit}>
+        <div className="row mt-3">
           {user.profilePic ? (
-            <img 
+            <img
               src={`http://localhost:3333/uploads/profile-pics/${user.profilePic}`}
               alt="Profile"
               onClick={() => document.getElementById("fileInput").click()}
-              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px", cursor: "pointer" }} 
+              className="profile-pic"
+              title="Edit Profile Pic"
             />
           ) : (
-            <img 
+            <img
               src={`http://localhost:3333/uploads/profile-pics/blank-avatar.jpg`}
               alt="Profile"
               onClick={() => document.getElementById("fileInput").click()}
-              style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "20px", cursor: "pointer" }} 
+              className="profile-pic"
+              title="Edit Profile Pic"
             />
           )}
-          <input 
-            type="file" 
-            id="fileInput" 
-            name="profile_pic" 
-            onChange={handleImageChange} 
-            style={{ display: "none" }} 
+          <input
+            type="file"
+            id="fileInput"
+            name="profile_pic"
+            onChange={handleImageChange}
+            className="mt-3 hidden"
           />
-
+        </div>
+        <div className="row mt-3">
           <input
             type="text"
             name="name"
             value={user.name}
             onChange={handleChange}
             placeholder="Name"
-            style={{ marginBottom: "10px", width: "100%" }}
+            className="input w-100"
           />
+        </div>
+        <div className="row mt-3">
           <input
             type="text"
             name="surname"
             value={user.surname}
             onChange={handleChange}
             placeholder="Surname"
-            style={{ marginBottom: "10px", width: "100%" }}
+            className="input w-100"
           />
+        </div>
+        <div className="row mt-3">
           <input
             type="email"
             name="email"
             value={user.email}
             onChange={handleChange}
             placeholder="Email"
-            style={{ marginBottom: "10px", width: "100%" }}
+            className="input w-100"
           />
+        </div>
+        <div className="row mt-3">
           <input
             type="password"
             name="newPassword"
             placeholder="New Password"
             value={user.newPassword}
             onChange={handleChange}
-            style={{ marginBottom: "10px", width: "100%" }}
+            className="input w-100"
           />
+        </div>
+        <div className="row mt-3">
           <input
             type="password"
             name="confirmPassword"
             placeholder="Confirm Password"
             value={user.confirmPassword}
             onChange={handleChange}
-            style={{ marginBottom: "20px", width: "100%" }}
+            className="input w-100"
           />
-          <button type="submit" className="btn btn-outline-success" style={{ width: "100%", marginBottom: "10px" }}>Save</button>
-        </form>
+        </div>
+        <div className="row mt-3">
+          <button
+            type="submit"
+            className="btn btn-outline-warning col-2 mx-auto"
+          >
+            Save
+          </button>
+        </div>
+      </form>
 
-        <Link to="/" className="link">
-          <button className="btn btn-outline-warning" style={{ width: "100%" }}>Back</button>
-        </Link>
-      </div>
+      <Link to="/" className="link">
+        <button className="btn btn-outline-success">Back</button>
+      </Link>
     </div>
   );
 }

@@ -1,13 +1,24 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { 
-  getTrip, getTripFriends, addFriendToTrip, removeFriendFromTrip, 
-  getFriends, getKeyPlaces, addKeyPlace, getPackingList, addPackingItem 
+import {
+  getTrip,
+  getTripFriends,
+  addFriendToTrip,
+  removeFriendFromTrip,
+  getFriends,
+  getKeyPlaces,
+  addKeyPlace,
+  getPackingList,
+  addPackingItem,
 } from "../services/api";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", { day: 'numeric', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 const SingleUpcomingTrip = () => {
@@ -20,7 +31,7 @@ const SingleUpcomingTrip = () => {
   const [newKeyPlace, setNewKeyPlace] = useState("");
   const [newPackingItem, setNewPackingItem] = useState("");
   const [feedback, setFeedback] = useState({ error: null, success: null });
-  const userId = JSON.parse(localStorage.getItem('user')).id;
+  const userId = JSON.parse(localStorage.getItem("user")).id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +40,7 @@ const SingleUpcomingTrip = () => {
         setTripData(trip);
 
         const tripFriendsList = await getTripFriends(tripId);
-        setTripFriends(tripFriendsList.map(friend => friend.id));
+        setTripFriends(tripFriendsList.map((friend) => friend.id));
 
         const keyPlacesList = await getKeyPlaces(tripId);
         setKeyPlaces(keyPlacesList);
@@ -39,7 +50,6 @@ const SingleUpcomingTrip = () => {
 
         const allFriends = await getFriends(userId);
         setFriends(allFriends);
-        
       } catch {
         setFeedback({ error: "Failed to load trip data." });
       }
@@ -59,7 +69,12 @@ const SingleUpcomingTrip = () => {
         setFeedback({ success: "Friend added to trip", error: null });
       }
     } catch {
-      setFeedback({ error: `Failed to ${tripFriends.includes(friend.id) ? 'remove' : 'add'} friend to trip`, success: null });
+      setFeedback({
+        error: `Failed to ${
+          tripFriends.includes(friend.id) ? "remove" : "add"
+        } friend to trip`,
+        success: null,
+      });
     }
   };
 
@@ -69,7 +84,7 @@ const SingleUpcomingTrip = () => {
       await addKeyPlace(tripId, userId, newKeyPlace);
       const keyPlacesList = await getKeyPlaces(tripId);
       setKeyPlaces(keyPlacesList);
-      
+
       setNewKeyPlace("");
       setFeedback({ success: "Key place added to trip", error: null });
     } catch {
@@ -83,7 +98,7 @@ const SingleUpcomingTrip = () => {
       await addPackingItem(tripId, newPackingItem);
       const packingItems = await getPackingList(tripId);
       setPackingList(packingItems);
-      
+
       setNewPackingItem("");
       setFeedback({ success: "Packing item added", error: null });
     } catch {
@@ -97,10 +112,16 @@ const SingleUpcomingTrip = () => {
     <div className="container col-10 mx-auto single">
       <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
 
-      <p className="text-center"><strong>Hosted by:</strong> {tripData.host_name}</p>
-      <div className="d-flex justify-content-between">
-        <p><strong>Start Date:</strong> {formatDate(tripData.start_date)}</p>
-        <p><strong>End Date:</strong> {formatDate(tripData.end_date)}</p>
+      <p className="text-center">
+        <strong>Hosted by:</strong> {tripData.host_name}
+      </p>
+      <div className="row">
+        <p className="">
+          <strong>Start Date:</strong> {formatDate(tripData.start_date)}
+        </p>
+        <p className="">
+          <strong>End Date:</strong> {formatDate(tripData.end_date)}
+        </p>
       </div>
 
       <h5>Itinerary</h5>
@@ -109,47 +130,74 @@ const SingleUpcomingTrip = () => {
       <h5>Notes</h5>
       <p>{tripData.notes}</p>
 
-      <h5>Friends</h5>
+      <h5>Buddies</h5>
       <div>
         {friends.map((friend) => (
-          <div key={friend.id} className="mb-2">
-            {friend.name} 
-            <button 
-              onClick={() => toggleFriendInTrip(friend)} 
-              className={`btn btn-sm ${tripFriends.includes(friend.id) ? 'btn-outline-danger' : 'btn-outline-primary'}`}
+          <div key={friend.id} className="mb-2 row mt-3">
+            <p className="col">{friend.name}</p>
+            <button
+              onClick={() => toggleFriendInTrip(friend)}
+              className={`btn ml-2 col ${
+                tripFriends.includes(friend.id)
+                  ? "btn-outline-success"
+                  : "btn-outline-warning"
+              }`}
             >
-              {tripFriends.includes(friend.id) ? "Remove from Trip" : "Add to Trip"}
+              {tripFriends.includes(friend.id)
+                ? "Remove from Trip"
+                : "Add to Trip"}
             </button>
           </div>
         ))}
       </div>
 
-      <h5>Key Places</h5>
+      <h5>Key Places to Visit</h5>
       <div>
-        {keyPlaces.map((place, i) => <div key={i}>{place.name}</div>)}
+        {keyPlaces.map((place, i) => (
+          <div key={i}>{place.name}</div>
+        ))}
       </div>
-      <input
-        type="text"
-        value={newKeyPlace}
-        onChange={(e) => setNewKeyPlace(e.target.value)}
-        placeholder="Add a new key place"
-      />
-      <button onClick={handleAddKeyPlace} className="btn btn-outline-warning">Add Key Place</button>
+      <div className="mt-4 row">
+        <input
+          type="text"
+          value={newKeyPlace}
+          onChange={(e) => setNewKeyPlace(e.target.value)}
+          placeholder="Add a new key place"
+          className="input"
+        />
+        <button onClick={handleAddKeyPlace} className="btn btn-outline-warning">
+          Add Key Place
+        </button>
+      </div>
 
       <h5>Packing List</h5>
       <div>
-        {packingList.map((item) => <div key={item.id}>{item.item}</div>)}
+        {packingList.map((item) => (
+          <div key={item.id}>{item.item}</div>
+        ))}
       </div>
-      <input
-        type="text"
-        value={newPackingItem}
-        onChange={(e) => setNewPackingItem(e.target.value)}
-        placeholder="Add a new packing item"
-      />
-      <button onClick={handleAddPackingItem} className="btn btn-outline-warning">Add Packing Item</button>
+      <div className="mt-4 row">
+        <input
+          type="text"
+          value={newPackingItem}
+          onChange={(e) => setNewPackingItem(e.target.value)}
+          placeholder="Add a new packing item"
+          className="input"
+        />
+        <button
+          onClick={handleAddPackingItem}
+          className="btn btn-outline-warning"
+        >
+          Add Packing Item
+        </button>
+      </div>
 
-      {feedback.error && <div className="alert alert-danger">{feedback.error}</div>}
-      {feedback.success && <div className="alert alert-success">{feedback.success}</div>}
+      {feedback.error && (
+        <div className="alert alert-danger">{feedback.error}</div>
+      )}
+      {feedback.success && (
+        <div className="alert alert-success">{feedback.success}</div>
+      )}
     </div>
   );
 };

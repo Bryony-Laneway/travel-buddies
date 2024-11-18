@@ -12,7 +12,7 @@ const formatDate = (dateString) => {
 export function UpcomingCard(props) {
   return (
     <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-4 mb-3">
-      <div className="card shadow-sm">
+      <div className="card shadow-lg">
         <div className="card-body">
           <h5 className="card-title mb-2 mt-1">{props.name}</h5>
           <p className="card-text mb-1">

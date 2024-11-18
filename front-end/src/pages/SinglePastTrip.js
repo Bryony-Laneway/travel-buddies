@@ -133,8 +133,10 @@ const SinglePastTrip = () => {
   if (!tripData) return <p>Loading...</p>;
 
   return (
-    <div className="container col-10 mx-auto single">
-      <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
+    <div className="container col-10 mx-auto single shadow-lg">
+      <h3 className="text-center w-100 mb-4 trip-heading">
+        {tripData.trip_name}
+      </h3>
 
       <p className="text-center">
         <strong>Hosted by:</strong> {tripData.host_name}
@@ -148,13 +150,13 @@ const SinglePastTrip = () => {
         </p>
       </div>
 
-      <h5>Our Itinerary</h5>
+      <h5 className="trip-subheading">Our Itinerary</h5>
       <p>{tripData.itinerary}</p>
 
-      <h5>Key Notes</h5>
+      <h5 className="trip-subheading">Key Notes</h5>
       <p>{tripData.notes}</p>
 
-      <h5>Trip Buddies</h5>
+      <h5 className="trip-subheading">Trip Buddies</h5>
       <div>
         {tripFriends.map((friendId) => {
           const friend = friends.find((f) => f.id === friendId);
@@ -162,7 +164,7 @@ const SinglePastTrip = () => {
         })}
       </div>
 
-      <h5>Favourite Places</h5>
+      <h5 className="trip-subheading">Favourite Places</h5>
       <div>
         {keyPlaces.map((place, i) => (
           <div key={i}>{place.name}</div>

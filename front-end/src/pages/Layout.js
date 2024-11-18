@@ -206,7 +206,7 @@ const Layout = ({ onLogout, user }) => {
                 of 7 years.
               </p>
 
-              <p className="mb-5">
+              <p className="mb-5 pb-5">
                 If you have any queries or complaints please contact us at:
                 Travel Buddies travelbuddies@outlook.com 0432 123 456
               </p>

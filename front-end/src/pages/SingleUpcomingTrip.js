@@ -109,8 +109,10 @@ const SingleUpcomingTrip = () => {
   if (!tripData) return <p>Loading...</p>;
 
   return (
-    <div className="container col-10 mx-auto single">
-      <h3 className="text-center w-100 mb-4">{tripData.trip_name}</h3>
+    <div className="container col-10 mx-auto single shadow-lg">
+      <h3 className="text-center w-100 mb-4 trip-heading">
+        {tripData.trip_name}
+      </h3>
 
       <p className="text-center">
         <strong>Hosted by:</strong> {tripData.host_name}
@@ -124,20 +126,20 @@ const SingleUpcomingTrip = () => {
         </p>
       </div>
 
-      <h5>Itinerary</h5>
+      <h5 className="trip-subheading">Itinerary</h5>
       <p>{tripData.itinerary}</p>
 
-      <h5>Notes</h5>
+      <h5 className="trip-subheading">Notes</h5>
       <p>{tripData.notes}</p>
 
-      <h5>Buddies</h5>
+      <h5 className="trip-subheading">Buddies</h5>
       <div>
         {friends.map((friend) => (
           <div key={friend.id} className="mb-2 row mt-3">
-            <p className="col">{friend.name}</p>
+            <p className="col-md-5 pt-3">{friend.name}</p>
             <button
               onClick={() => toggleFriendInTrip(friend)}
-              className={`btn ml-2 col ${
+              className={`btn col-md-5 ${
                 tripFriends.includes(friend.id)
                   ? "btn-outline-success"
                   : "btn-outline-warning"
@@ -151,45 +153,52 @@ const SingleUpcomingTrip = () => {
         ))}
       </div>
 
-      <h5>Key Places to Visit</h5>
+      <h5 className="trip-subheading">Key Places to Visit</h5>
       <div>
         {keyPlaces.map((place, i) => (
           <div key={i}>{place.name}</div>
         ))}
       </div>
       <div className="mt-4 row">
-        <input
-          type="text"
-          value={newKeyPlace}
-          onChange={(e) => setNewKeyPlace(e.target.value)}
-          placeholder="Add a new key place"
-          className="input"
-        />
-        <button onClick={handleAddKeyPlace} className="btn btn-outline-warning">
-          Add Key Place
-        </button>
+        <div className="mx-auto align-text-center">
+          <input
+            type="text"
+            value={newKeyPlace}
+            onChange={(e) => setNewKeyPlace(e.target.value)}
+            placeholder="Add a new key place"
+            className="input col-md-6"
+          />
+          <button
+            onClick={handleAddKeyPlace}
+            className="btn btn-outline-warning col-md-2"
+          >
+            Add
+          </button>
+        </div>
       </div>
 
-      <h5>Packing List</h5>
+      <h5 className="trip-subheading">Packing List</h5>
       <div>
         {packingList.map((item) => (
           <div key={item.id}>{item.item}</div>
         ))}
       </div>
       <div className="mt-4 row">
-        <input
-          type="text"
-          value={newPackingItem}
-          onChange={(e) => setNewPackingItem(e.target.value)}
-          placeholder="Add a new packing item"
-          className="input"
-        />
-        <button
-          onClick={handleAddPackingItem}
-          className="btn btn-outline-warning"
-        >
-          Add Packing Item
-        </button>
+        <div className="mx-auto align-text-center">
+          <input
+            type="text"
+            value={newPackingItem}
+            onChange={(e) => setNewPackingItem(e.target.value)}
+            placeholder="Add a new packing item"
+            className="input col-md-6"
+          />
+          <button
+            onClick={handleAddPackingItem}
+            className="btn btn-outline-warning col-md-2"
+          >
+            Add
+          </button>
+        </div>
       </div>
 
       {feedback.error && (

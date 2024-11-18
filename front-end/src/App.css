@@ -182,13 +182,26 @@ h5 {
 }
 
 .single {
-  /* border: 1px solid var(--orange-500); */
-  border: 1px solid var(--green-600);
+  border: 2px solid var(--orange-500);
+  /* border: 1px solid var(--green-600); */
   border-radius: 10px;
   /* background-color: var(--orange-50); */
-  background-color: var(--green-50);
+  /* background-color: var(--green-50); */
   text-align: center;
   padding: 60px 30px;
+}
+
+.trip-heading {
+  text-decoration: underline;
+  text-decoration-color: var(--orange-500);
+}
+
+.trip-subheading {
+  text-decoration: underline;
+}
+
+strong {
+  text-decoration: none;
 }
 
 .add {
@@ -237,6 +250,12 @@ h5 {
 .user-name {
   width: auto;
   text-align: center;
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+  padding: 0;
 }
 
 .footer-logo {

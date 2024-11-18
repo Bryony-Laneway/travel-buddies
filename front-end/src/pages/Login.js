@@ -42,8 +42,9 @@ export default function Login({ onLogin }) {
     let errorMessages = [];
 
     if (resetPassword.length < 6) errorMessages.push("Password is too short.");
-    //if (!/[A-Z]/.test(resetPassword)) errorMessages.push("Must include a capital letter.");
-    //if (!/\d/.test(resetPassword)) errorMessages.push("Must include a number.");
+    if (!/[A-Z]/.test(resetPassword))
+      errorMessages.push("Must include a capital letter.");
+    if (!/\d/.test(resetPassword)) errorMessages.push("Must include a number.");
     if (resetPassword !== resetPassword2)
       errorMessages.push("Passwords must match.");
 

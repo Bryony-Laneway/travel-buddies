@@ -15,31 +15,17 @@ const openaiRoutes = require("./routes/openaiRoutes");
 // Serve static files from the "uploads" directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// cors 1
-app.use(cors());
-
-// cors 2
-// const allowedOrigins = ["http://localhost:3000", "http://localhost:3333"];
-// const allowedOrigins = "*";
-// app.use(
-//   cors({
-//     origins: function (origin, callback) {
-//       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//         callback(null, true); // null error, true origin allowed
-//       } else {
-//         callback(new Error("Not allowed - CORS"));
-//       }
-//     },
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // parse json
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-
 
 // Middleware and routes
 app.get("/", function (req, res) {

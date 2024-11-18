@@ -16,8 +16,9 @@ export default function SignUp() {
     let errorMessages = [];
 
     if (password.length < 6) errorMessages.push("Password is too short.");
-    //if (!/[A-Z]/.test(password)) errorMessages.push("Must include a capital letter.");
-    //if (!/\d/.test(password)) errorMessages.push("Must include a number.");
+    if (!/[A-Z]/.test(password))
+      errorMessages.push("Must include a capital letter.");
+    if (!/\d/.test(password)) errorMessages.push("Must include a number.");
     if (password !== password2) errorMessages.push("Passwords must match.");
 
     if (errorMessages.length) {
